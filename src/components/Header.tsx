@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { CompareNavLink } from "@/components/compare/CompareNavLink";
 import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
 import { pickLocalized } from "@/lib/i18n/localized";
@@ -32,9 +33,9 @@ export async function Header() {
           <Link href="/assistant" className="btn btn-quiet max-lg:hidden">
             {t("assistant")}
           </Link>
-          <Link href="/compare" className="btn btn-quiet max-lg:hidden">
+          <CompareNavLink className="btn btn-quiet max-lg:hidden">
             {t("compare")}
-          </Link>
+          </CompareNavLink>
           <Link href="/login" className="btn btn-quiet">
             {t("signIn")}
           </Link>
@@ -52,9 +53,9 @@ export async function Header() {
             </Link>
           </li>
           <li className="lg:hidden">
-            <Link href="/compare" className={`${RAIL_LINK} font-semibold`}>
+            <CompareNavLink className={`${RAIL_LINK} font-semibold`}>
               {t("compare")}
-            </Link>
+            </CompareNavLink>
           </li>
           <li
             aria-hidden="true"

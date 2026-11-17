@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { Breadcrumb } from "@/components/catalog/Breadcrumb";
 import { CategoryGlyph } from "@/components/CategoryGlyph";
+import { CompareButton } from "@/components/compare/CompareButton";
 import { Link } from "@/i18n/navigation";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
 import { countryName, formatQuantity, formatUsd } from "@/lib/catalog/format";
@@ -70,6 +71,10 @@ async function ProductContent({ params }: Props) {
       <h1 className="mt-5 max-w-[24ch] text-balance font-display text-[clamp(2rem,1.4rem+2.4vw,3.25rem)] font-extrabold leading-none">
         {name}
       </h1>
+
+      <div className="mt-5">
+        <CompareButton id={product.id} name={name} supplierName={supplier.name} />
+      </div>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <div className="flex flex-col gap-10">

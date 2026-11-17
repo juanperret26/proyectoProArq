@@ -96,6 +96,27 @@ export async function getProductDetail(id: string): Promise<ProductDetail | null
   };
 }
 
+/** Productos para el comparador, en el mismo orden que `ids`. */
+export async function getProductsByIds(ids: readonly string[]): Promise<ProductDetail[]> {
+  const valid = ids.filter((id) => UUID.test(id));
+  if (valid.length === 0) return [];
+  const { data, error } = await createPublicClient()
+    .from("products")
+    .select(PRODUCT_DETAIL_SELECT)
+    .in("id", valid);
+  if (error) fail("cargar los productos a comparar", error);
+  const byId = new Map(
+    z
+      .array(productDetailSchema)
+      .parse(data)
+      .map((product) => [product.id, product] as const),
+  );
+  return valid.flatMap((id) => {
+    const product = byId.get(id);
+    return product ? [product] : [];
+  });
+}
+
 export async function getSupplierDetail(slug: string): Promise<SupplierDetail | null> {
   if (!SLUG.test(slug)) return null;
   const { data, error } = await createPublicClient()

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
+import { CompareTray } from "@/components/compare/CompareTray";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { routing } from "@/i18n/routing";
@@ -79,6 +80,7 @@ export default async function LocaleLayout({
             {children}
           </main>
           <Footer />
+          <CompareTray />
         </NextIntlClientProvider>
       </body>
     </html>

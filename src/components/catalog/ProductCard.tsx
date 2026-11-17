@@ -2,6 +2,7 @@ import { BadgeCheck } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { CategoryGlyph } from "@/components/CategoryGlyph";
+import { CompareButton } from "@/components/compare/CompareButton";
 import { Link } from "@/i18n/navigation";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
 import { countryName, formatQuantity, formatUsd } from "@/lib/catalog/format";
@@ -69,6 +70,13 @@ export async function ProductCard({ product }: Props) {
             </dd>
           </div>
         </dl>
+        <div>
+          <CompareButton
+            id={product.id}
+            name={name}
+            supplierName={product.supplier_name}
+          />
+        </div>
       </div>
     </article>
   );
