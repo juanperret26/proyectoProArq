@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "ProArq: compare proveedores de construcción",
+    "description": "Busque materiales de construcción de proveedores de China, India, Taiwán, Turquía y Vietnam. Compare precio, pedido mínimo y plazo de entrega, y pida cotizaciones."
+  },
+  "common": {
+    "skipToContent": "Ir al contenido"
+  },
+  "header": {
+    "home": "Inicio de ProArq",
+    "railNav": "Herramientas y materiales",
+    "assistant": "Asistente",
+    "compare": "Comparar",
+    "signIn": "Ingresar"
+  },
+  "search": {
+    "label": "Buscar materiales",
+    "placeholder": "Buscar materiales, p. ej. porcelanato 60×60",
+    "submit": "Buscar"
+  },
+  "language": {
+    "switchTo": "View the site in English",
+    "target": "English"
+  },
+  "home": {
+    "title": "Materiales de construcción de cinco países, comparados línea por línea.",
+    "lead": "Busque productos de proveedores de China, India, Taiwán, Turquía y Vietnam. Ponga lado a lado precio, pedido mínimo y plazo de entrega, y pida cotizaciones a los que le convengan.",
+    "browse": "Ver materiales",
+    "describe": "Describa su proyecto al asistente",
+    "legendTitle": "Buscar por material",
+    "stepsTitle": "Cómo se compra con ProArq",
+    "steps": {
+      "search": {
+        "title": "Busque o describa lo que necesita",
+        "body": "Escriba un material, o cuéntele su proyecto al asistente con sus palabras."
+      },
+      "compare": {
+        "title": "Compare ofertas línea por línea",
+        "body": "Agregue hasta cuatro productos y lea en una sola tabla precios por cantidad, pedido mínimo, plazo de entrega y certificaciones."
+      },
+      "quote": {
+        "title": "Pida cotizaciones a los proveedores que elija",
+        "body": "Envíe un pedido por proveedor y siga cada respuesta desde su cuenta."
+      }
+    }
+  },
+  "footer": {
+    "about": "ProArq ayuda a constructores y arquitectos a comparar proveedores de construcción de distintos países antes de comprar.",
+    "sample": "Catálogo de demostración: los proveedores, productos y precios son datos de ejemplo.",
+    "materials": "Materiales",
+    "tools": "Herramientas"
+  },
+  "notFound": {
+    "title": "Esta página no está en el catálogo",
+    "body": "Puede que la dirección esté mal escrita o que la página se haya movido.",
+    "home": "Ir al inicio"
+  }
+}

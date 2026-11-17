@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "ProArq: compare construction suppliers",
+    "description": "Search construction materials from suppliers in China, India, Taiwan, Türkiye and Vietnam. Compare price, minimum order and lead time, then request quotes."
+  },
+  "common": {
+    "skipToContent": "Skip to content"
+  },
+  "header": {
+    "home": "ProArq home",
+    "railNav": "Tools and materials",
+    "assistant": "Assistant",
+    "compare": "Compare",
+    "signIn": "Sign in"
+  },
+  "search": {
+    "label": "Search materials",
+    "placeholder": "Search materials, e.g. porcelain tile 60×60",
+    "submit": "Search"
+  },
+  "language": {
+    "switchTo": "Ver el sitio en español",
+    "target": "Español"
+  },
+  "home": {
+    "title": "Construction materials from five countries, compared line by line.",
+    "lead": "Search products from suppliers in China, India, Taiwan, Türkiye and Vietnam. Put price, minimum order and lead time next to each other, then request quotes from the ones that fit.",
+    "browse": "Browse materials",
+    "describe": "Describe your project to the assistant",
+    "legendTitle": "Browse by material",
+    "stepsTitle": "How buying through ProArq works",
+    "steps": {
+      "search": {
+        "title": "Search or describe what you need",
+        "body": "Type a material, or tell the assistant about your project in plain words."
+      },
+      "compare": {
+        "title": "Compare offers line by line",
+        "body": "Add up to four products and read price tiers, minimum order, lead time and certifications in one table."
+      },
+      "quote": {
+        "title": "Request quotes from the suppliers you pick",
+        "body": "Send one request per supplier and follow every answer from your account."
+      }
+    }
+  },
+  "footer": {
+    "about": "ProArq helps builders and architects compare construction suppliers across countries before they buy.",
+    "sample": "Demo catalog: suppliers, products and prices are sample data.",
+    "materials": "Materials",
+    "tools": "Tools"
+  },
+  "notFound": {
+    "title": "This page is not in the catalog",
+    "body": "The address may be mistyped, or the page may have moved.",
+    "home": "Go to the home page"
+  }
+}

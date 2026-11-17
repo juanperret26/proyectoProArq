@@ -1,0 +1,137 @@
+/* Tailwind solo busca clases dentro de src/ (no en .claude/ ni otras carpetas). */
+@import "tailwindcss" source("..");
+
+/*
+  Sistema visual de ProArq: "blueline", la copia heliográfica de planos.
+  Papel blanco, tinta índigo y líneas azules. El amarillo marca el mejor
+  valor y el rojo las anotaciones, igual que sobre un plano impreso.
+*/
+@theme {
+  --color-paper: #ffffff;
+  --color-vellum: #f4f5fc;
+  --color-ink: #15194d;
+  --color-ink-soft: #4a4f7d;
+  --color-blueline: #2f3ccf;
+  --color-blueline-deep: #232da3;
+  --color-rule: #c8cdea;
+  --color-rule-strong: #8a91c9;
+  --color-marker: #ffe24d;
+  --color-redline: #d42a3c;
+
+  /* Solo los controles llevan radio; la estructura es de líneas rectas. */
+  --radius-control: 3px;
+
+  --animate-plot: plot-in 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  /* Trazado de izquierda a derecha, como el pase de un plóter. */
+  @keyframes plot-in {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-sofia), ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    var(--font-sofia-xcond), "Arial Narrow", ui-sans-serif, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blueline);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-marker);
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding-inline: 1.125rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-weight: 650;
+  line-height: 1.1;
+  white-space: nowrap;
+  transition:
+    background-color 120ms,
+    border-color 120ms,
+    color 120ms;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+@utility btn-primary {
+  background-color: var(--color-blueline);
+  color: var(--color-paper);
+
+  &:hover {
+    background-color: var(--color-blueline-deep);
+  }
+}
+
+@utility btn-outline {
+  border-color: var(--color-rule-strong);
+  color: var(--color-ink);
+
+  &:hover {
+    border-color: var(--color-blueline);
+    color: var(--color-blueline);
+  }
+}
+
+@utility btn-quiet {
+  color: var(--color-ink);
+
+  &:hover {
+    background-color: var(--color-vellum);
+  }
+}
+
+@utility link-text {
+  color: var(--color-blueline);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+
+  &:hover {
+    text-decoration-thickness: 2px;
+  }
+}
