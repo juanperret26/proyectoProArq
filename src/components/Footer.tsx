@@ -60,7 +60,7 @@ export async function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/login" className={FOOTER_LINK}>
+              <Link href="/sign-in" className={FOOTER_LINK}>
                 {tHeader("signIn")}
               </Link>
             </li>

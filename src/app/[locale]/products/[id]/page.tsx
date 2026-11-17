@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { ProductActions } from "@/components/account/ProductActions";
 import { Breadcrumb } from "@/components/catalog/Breadcrumb";
 import { CategoryGlyph } from "@/components/CategoryGlyph";
 import { CompareButton } from "@/components/compare/CompareButton";
@@ -72,7 +73,8 @@ async function ProductContent({ params }: Props) {
         {name}
       </h1>
 
-      <div className="mt-5">
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <ProductActions productId={product.id} />
         <CompareButton id={product.id} name={name} supplierName={supplier.name} />
       </div>
 

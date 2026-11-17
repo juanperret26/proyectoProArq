@@ -11,7 +11,8 @@
     "railNav": "Herramientas y materiales",
     "assistant": "Asistente",
     "compare": "Comparar",
-    "signIn": "Ingresar"
+    "signIn": "Ingresar",
+    "account": "Mi cuenta"
   },
   "search": {
     "label": "Buscar materiales",
@@ -180,5 +181,56 @@
     "title": "Esta página no está en el catálogo",
     "body": "Puede que la dirección esté mal escrita o que la página se haya movido.",
     "home": "Ir al inicio"
+  },
+  "account": {
+    "title": "Su cuenta",
+    "sections": "Secciones de la cuenta",
+    "profile": "Perfil",
+    "profileLead": "Esta información se envía a los proveedores con cada solicitud de cotización.",
+    "fullName": "Nombre completo",
+    "company": "Empresa",
+    "country": "Código de país",
+    "countryHint": "Dos letras, por ejemplo AR o US.",
+    "save": "Guardar cambios",
+    "saved": "Guardado.",
+    "favorites": "Favoritos",
+    "rfqs": "Mis cotizaciones",
+    "backToAccount": "Volver a su cuenta",
+    "requestQuote": "Solicitar cotización",
+    "addFavorite": "Guardar en favoritos",
+    "removeFavorite": "Guardado · quitar",
+    "noFavoritesTitle": "Todavía no tiene favoritos",
+    "noFavoritesBody": "Guarde productos desde su ficha para encontrarlos aquí.",
+    "noRfqsTitle": "Todavía no solicitó cotizaciones",
+    "noRfqsBody": "Abra un producto y elija Solicitar cotización.",
+    "browse": "Explorar materiales",
+    "errors": {
+      "emailInvalid": "Ingrese un correo válido.",
+      "passwordShort": "La contraseña es demasiado corta.",
+      "nameTooLong": "El nombre es demasiado largo.",
+      "companyTooLong": "El nombre de la empresa es demasiado largo.",
+      "countryInvalid": "Use dos letras mayúsculas, por ejemplo AR.",
+      "messageRequired": "Escriba un mensaje para el proveedor.",
+      "messageTooLong": "El mensaje es demasiado largo.",
+      "destinationTooLong": "El destino es demasiado largo.",
+      "quantityInvalid": "Ingrese una cantidad mayor que cero.",
+      "quantityBelowMin": "La cantidad es menor que el pedido mínimo de este proveedor.",
+      "invalid": "Algo salió mal. Revise el formulario e intente de nuevo."
+    }
+  },
+  "rfq": {
+    "title": "Solicitar cotización",
+    "lead": "Pida a {supplier} una cotización de {product}.",
+    "quantity": "Cantidad ({unit})",
+    "minOrderHint": "Pedido mínimo: {qty} {unit}.",
+    "destination": "Destino de entrega",
+    "destinationPlaceholder": "Ciudad y país",
+    "message": "Mensaje para el proveedor",
+    "send": "Enviar solicitud",
+    "status": {
+      "sent": "Enviada",
+      "answered": "Respondida",
+      "closed": "Cerrada"
+    }
   }
 }

@@ -11,7 +11,8 @@
     "railNav": "Tools and materials",
     "assistant": "Assistant",
     "compare": "Compare",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "account": "Account"
   },
   "search": {
     "label": "Search materials",
@@ -180,5 +181,56 @@
     "title": "This page is not in the catalog",
     "body": "The address may be mistyped, or the page may have moved.",
     "home": "Go to the home page"
+  },
+  "account": {
+    "title": "Your account",
+    "sections": "Account sections",
+    "profile": "Profile",
+    "profileLead": "This information is sent to suppliers with each quote request.",
+    "fullName": "Full name",
+    "company": "Company",
+    "country": "Country code",
+    "countryHint": "Two letters, for example AR or US.",
+    "save": "Save changes",
+    "saved": "Saved.",
+    "favorites": "Favorites",
+    "rfqs": "My RFQs",
+    "backToAccount": "Back to account",
+    "requestQuote": "Request a quote",
+    "addFavorite": "Save to favorites",
+    "removeFavorite": "Saved · remove",
+    "noFavoritesTitle": "You have no favorites yet",
+    "noFavoritesBody": "Save products from their page to find them here later.",
+    "noRfqsTitle": "You have not requested any quotes yet",
+    "noRfqsBody": "Open a product and choose Request a quote.",
+    "browse": "Browse materials",
+    "errors": {
+      "emailInvalid": "Enter a valid email.",
+      "passwordShort": "The password is too short.",
+      "nameTooLong": "The name is too long.",
+      "companyTooLong": "The company name is too long.",
+      "countryInvalid": "Use two capital letters, for example AR.",
+      "messageRequired": "Write a message for the supplier.",
+      "messageTooLong": "The message is too long.",
+      "destinationTooLong": "The destination is too long.",
+      "quantityInvalid": "Enter a quantity greater than zero.",
+      "quantityBelowMin": "The quantity is below this supplier's minimum order.",
+      "invalid": "Something went wrong. Please check the form and try again."
+    }
+  },
+  "rfq": {
+    "title": "Request a quote",
+    "lead": "Ask {supplier} for a quote on {product}.",
+    "quantity": "Quantity ({unit})",
+    "minOrderHint": "Minimum order: {qty} {unit}.",
+    "destination": "Delivery destination",
+    "destinationPlaceholder": "City and country",
+    "message": "Message to the supplier",
+    "send": "Send request",
+    "status": {
+      "sent": "Sent",
+      "answered": "Answered",
+      "closed": "Closed"
+    }
   }
 }

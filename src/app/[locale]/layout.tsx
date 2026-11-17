@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/nextjs";
+import { esES } from "@clerk/localizations";
 import type { Metadata } from "next";
 import { Sofia_Sans, Sofia_Sans_Extra_Condensed } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -68,20 +70,29 @@ export default async function LocaleLayout({
       className={`${sofia.variable} ${sofiaExtraCondensed.variable}`}
     >
       <body className="flex min-h-dvh flex-col antialiased">
-        <NextIntlClientProvider>
-          <a
-            href="#main"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
-          >
-            {t("skipToContent")}
-          </a>
-          <Header />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-          <CompareTray />
-        </NextIntlClientProvider>
+        <ClerkProvider
+          localization={locale === "es" ? esES : undefined}
+          signInUrl={`/${locale}/sign-in`}
+          signUpUrl={`/${locale}/sign-up`}
+          signInFallbackRedirectUrl={`/${locale}/account`}
+          signUpFallbackRedirectUrl={`/${locale}/account`}
+          afterSignOutUrl={`/${locale}`}
+        >
+          <NextIntlClientProvider>
+            <a
+              href="#main"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+            >
+              {t("skipToContent")}
+            </a>
+            <Header />
+            <main id="main" className="flex-1">
+              {children}
+            </main>
+            <Footer />
+            <CompareTray />
+          </NextIntlClientProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

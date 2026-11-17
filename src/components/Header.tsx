@@ -4,6 +4,7 @@ import { CompareNavLink } from "@/components/compare/CompareNavLink";
 import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
 import { pickLocalized } from "@/lib/i18n/localized";
+import { AuthNav } from "./AuthNav";
 import { LanguageToggle } from "./LanguageToggle";
 import { Logo } from "./Logo";
 import { SearchForm } from "./SearchForm";
@@ -36,9 +37,7 @@ export async function Header() {
           <CompareNavLink className="btn btn-quiet max-lg:hidden">
             {t("compare")}
           </CompareNavLink>
-          <Link href="/login" className="btn btn-quiet">
-            {t("signIn")}
-          </Link>
+          <AuthNav />
           <Suspense fallback={<span className="inline-block h-11 w-24" aria-hidden="true" />}>
             <LanguageToggle />
           </Suspense>
