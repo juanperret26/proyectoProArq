@@ -44,11 +44,102 @@
       }
     }
   },
+  "catalog": {
+    "searchTitle": "Search results",
+    "searchTitleFor": "Results for “{query}”",
+    "allMaterials": "All materials",
+    "subcategories": "Types of {category}",
+    "resultCount": "{count, plural, one {# product} other {# products}}",
+    "noResultsTitle": "No products match these filters",
+    "noResultsBody": "Try removing a filter or searching for a broader term.",
+    "clearFilters": "Clear filters",
+    "applyFilters": "Apply filters",
+    "filtersTitle": "Filters",
+    "sortLabel": "Sort by",
+    "breadcrumb": "Breadcrumb",
+    "sort": {
+      "relevance": "Relevance",
+      "price_asc": "Price: low to high",
+      "price_desc": "Price: high to low",
+      "lead_time": "Shortest lead time"
+    },
+    "filters": {
+      "country": "Supplier country",
+      "certifications": "Certifications",
+      "priceRange": "Price per unit (USD)",
+      "minPrice": "Min",
+      "maxPrice": "Max",
+      "moq": "Max. minimum order",
+      "lead": "Max. lead time (days)",
+      "verified": "Verified suppliers only"
+    },
+    "card": {
+      "from": "From",
+      "perUnit": "per {unit}",
+      "moq": "Min. order",
+      "leadTime": "Lead time",
+      "days": "{count} days",
+      "verified": "Verified"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page} of {total}"
+    },
+    "units": {
+      "m2": "m²",
+      "ton": "ton",
+      "piece": "piece",
+      "bag": "bag",
+      "sheet": "sheet",
+      "roll": "roll",
+      "box": "box",
+      "set": "set"
+    },
+    "featuredTitle": "Products from verified suppliers",
+    "featuredAll": "See all products"
+  },
+  "product": {
+    "priceTiers": "Price by quantity",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price (USD)",
+    "tierQty": "{qty} {unit} or more",
+    "specs": "Specifications",
+    "description": "Description",
+    "supplier": "Supplier",
+    "viewSupplier": "View supplier profile",
+    "minOrder": "Minimum order",
+    "leadTime": "Lead time",
+    "country": "Ships from",
+    "certifications": "Supplier certifications",
+    "noCertifications": "No certifications listed"
+  },
+  "supplier": {
+    "typeLabel": "Business type",
+    "type": {
+      "manufacturer": "Manufacturer",
+      "trading_company": "Trading company"
+    },
+    "location": "Location",
+    "founded": "Founded",
+    "responseTime": "Typical response time",
+    "hours": "{count} h",
+    "certifications": "Certifications",
+    "noCertifications": "No certifications listed",
+    "verified": "Verified supplier",
+    "productsTitle": "Products from this supplier"
+  },
   "footer": {
     "about": "ProArq helps builders and architects compare construction suppliers across countries before they buy.",
     "sample": "Demo catalog: suppliers, products and prices are sample data.",
     "materials": "Materials",
     "tools": "Tools"
+  },
+  "error": {
+    "title": "We could not load this page",
+    "body": "The catalog did not answer. Your search is safe; try again in a moment.",
+    "retry": "Try again"
   },
   "notFound": {
     "title": "This page is not in the catalog",

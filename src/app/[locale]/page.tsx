@@ -1,4 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { Suspense } from "react";
+import { FeaturedProducts } from "@/components/catalog/FeaturedProducts";
 import { CategoryGlyph } from "@/components/CategoryGlyph";
 import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
@@ -67,6 +69,10 @@ export default async function HomePage() {
           </nav>
         </div>
       </section>
+
+      <Suspense fallback={null}>
+        <FeaturedProducts />
+      </Suspense>
 
       <section
         aria-labelledby="steps-title"

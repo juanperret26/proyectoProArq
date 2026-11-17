@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
 import { pickLocalized } from "@/lib/i18n/localized";
@@ -37,7 +38,9 @@ export async function Header() {
           <Link href="/login" className="btn btn-quiet">
             {t("signIn")}
           </Link>
-          <LanguageToggle />
+          <Suspense fallback={<span className="inline-block h-11 w-24" aria-hidden="true" />}>
+            <LanguageToggle />
+          </Suspense>
         </div>
       </div>
 

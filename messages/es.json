@@ -44,11 +44,102 @@
       }
     }
   },
+  "catalog": {
+    "searchTitle": "Resultados de la búsqueda",
+    "searchTitleFor": "Resultados para “{query}”",
+    "allMaterials": "Todos los materiales",
+    "subcategories": "Tipos de {category}",
+    "resultCount": "{count, plural, one {# producto} other {# productos}}",
+    "noResultsTitle": "Ningún producto coincide con estos filtros",
+    "noResultsBody": "Pruebe quitando algún filtro o con un término más amplio.",
+    "clearFilters": "Borrar filtros",
+    "applyFilters": "Aplicar filtros",
+    "filtersTitle": "Filtros",
+    "sortLabel": "Ordenar por",
+    "breadcrumb": "Ruta de navegación",
+    "sort": {
+      "relevance": "Relevancia",
+      "price_asc": "Precio: de menor a mayor",
+      "price_desc": "Precio: de mayor a menor",
+      "lead_time": "Menor plazo de entrega"
+    },
+    "filters": {
+      "country": "País del proveedor",
+      "certifications": "Certificaciones",
+      "priceRange": "Precio por unidad (USD)",
+      "minPrice": "Mín.",
+      "maxPrice": "Máx.",
+      "moq": "Pedido mínimo máx.",
+      "lead": "Plazo de entrega máx. (días)",
+      "verified": "Solo proveedores verificados"
+    },
+    "card": {
+      "from": "Desde",
+      "perUnit": "por {unit}",
+      "moq": "Pedido mín.",
+      "leadTime": "Plazo",
+      "days": "{count} días",
+      "verified": "Verificado"
+    },
+    "pagination": {
+      "label": "Paginación",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {page} de {total}"
+    },
+    "units": {
+      "m2": "m²",
+      "ton": "tonelada",
+      "piece": "pieza",
+      "bag": "bolsa",
+      "sheet": "paño",
+      "roll": "rollo",
+      "box": "caja",
+      "set": "juego"
+    },
+    "featuredTitle": "Productos de proveedores verificados",
+    "featuredAll": "Ver todos los productos"
+  },
+  "product": {
+    "priceTiers": "Precio según cantidad",
+    "quantity": "Cantidad",
+    "unitPrice": "Precio unitario (USD)",
+    "tierQty": "{qty} {unit} o más",
+    "specs": "Especificaciones",
+    "description": "Descripción",
+    "supplier": "Proveedor",
+    "viewSupplier": "Ver perfil del proveedor",
+    "minOrder": "Pedido mínimo",
+    "leadTime": "Plazo de entrega",
+    "country": "Se envía desde",
+    "certifications": "Certificaciones del proveedor",
+    "noCertifications": "Sin certificaciones registradas"
+  },
+  "supplier": {
+    "typeLabel": "Tipo de empresa",
+    "type": {
+      "manufacturer": "Fabricante",
+      "trading_company": "Empresa comercializadora"
+    },
+    "location": "Ubicación",
+    "founded": "Fundada en",
+    "responseTime": "Tiempo de respuesta habitual",
+    "hours": "{count} h",
+    "certifications": "Certificaciones",
+    "noCertifications": "Sin certificaciones registradas",
+    "verified": "Proveedor verificado",
+    "productsTitle": "Productos de este proveedor"
+  },
   "footer": {
     "about": "ProArq ayuda a constructores y arquitectos a comparar proveedores de construcción de distintos países antes de comprar.",
     "sample": "Catálogo de demostración: los proveedores, productos y precios son datos de ejemplo.",
     "materials": "Materiales",
     "tools": "Herramientas"
+  },
+  "error": {
+    "title": "No pudimos cargar esta página",
+    "body": "El catálogo no respondió. Su búsqueda está a salvo; intente de nuevo en un momento.",
+    "retry": "Intentar de nuevo"
   },
   "notFound": {
     "title": "Esta página no está en el catálogo",
