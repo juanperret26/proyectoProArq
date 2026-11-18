@@ -20,6 +20,7 @@ export default clerkMiddleware(async (auth, request) => {
 });
 
 export const config = {
-  // Todas las rutas salvo API, internos de Next y archivos estáticos.
-  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
+  // Todas las rutas salvo API, internos de Next, el ícono de iOS (sin
+  // extensión, lo genera apple-icon.tsx) y archivos estáticos.
+  matcher: "/((?!api|_next|_vercel|apple-icon|.*\\..*).*)",
 };

@@ -55,22 +55,21 @@ export default async function HomePage() {
             <h2 id="legend-title" className="font-semibold">
               {t("legendTitle")}
             </h2>
-            <ul className="mt-3 grid grid-cols-2 border-l border-t border-blueline sm:grid-cols-4">
+            <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-9 sm:grid-cols-4">
               {CATEGORY_TAXONOMY.map((category, index) => (
-                <li
-                  key={category.slug}
-                  className="border-b border-r border-blueline"
-                >
+                <li key={category.slug}>
                   <Link
                     href={`/categories/${category.slug}`}
-                    className="group flex h-full flex-col justify-between gap-5 p-4 hover:bg-vellum focus-visible:bg-vellum focus-visible:-outline-offset-2 sm:p-5"
+                    className="group flex flex-col items-center gap-3 text-center focus-visible:outline-offset-4"
                   >
-                    <CategoryGlyph
-                      glyph={category.glyph}
-                      className="size-[68px] animate-plot text-blueline sm:size-[76px]"
-                      style={{ animationDelay: `${index * PLOT_STAGGER_MS}ms` }}
-                    />
-                    <span className="font-semibold leading-tight underline-offset-4 group-hover:underline">
+                    <span className="flex size-[104px] items-center justify-center rounded-full bg-vellum ring-1 ring-transparent transition-[transform,box-shadow,background-color,--tw-ring-color] duration-200 ease-out group-hover:-translate-y-1.5 group-hover:bg-paper group-hover:shadow-[0_12px_24px_-8px_rgb(35_45_163/0.4)] group-hover:ring-blueline group-focus-visible:-translate-y-1.5 group-focus-visible:bg-paper group-focus-visible:shadow-[0_12px_24px_-8px_rgb(35_45_163/0.4)] group-focus-visible:ring-blueline sm:size-[112px]">
+                      <CategoryGlyph
+                        glyph={category.glyph}
+                        className="size-[56px] animate-plot text-blueline transition-transform duration-200 ease-out group-hover:scale-110 sm:size-[62px]"
+                        style={{ animationDelay: `${index * PLOT_STAGGER_MS}ms` }}
+                      />
+                    </span>
+                    <span className="text-[0.9375rem] font-medium leading-tight transition-colors group-hover:text-blueline">
                       {pickLocalized(locale, category.nameEn, category.nameEs)}
                     </span>
                   </Link>

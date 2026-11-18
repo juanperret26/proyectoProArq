@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="none">
-  <rect width="28" height="28" fill="#ffffff"/>
-  <clipPath id="c"><rect x="3" y="3" width="22" height="22"/></clipPath>
-  <path d="M-1 17L17 -1M-1 29L29 -1M11 29L29 11" stroke="#2f3ccf" stroke-width="2.4" clip-path="url(#c)"/>
-  <rect x="3" y="3" width="22" height="22" stroke="#2f3ccf" stroke-width="2.4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="6" fill="#2f3ccf"/>
+  <clipPath id="c"><rect x="7" y="7" width="18" height="18"/></clipPath>
+  <path d="M5 21L21 5M5 31L31 5M15 31L31 15" stroke="#ffffff" stroke-width="2" clip-path="url(#c)"/>
+  <rect x="7" y="7" width="18" height="18" stroke="#ffffff" stroke-width="2"/>
 </svg>
