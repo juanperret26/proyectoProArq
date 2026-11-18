@@ -1,8 +1,9 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { Link } from "@/i18n/navigation";
-import { recommend } from "@/lib/assistant/recommend";
+import { createAiFallback, DAILY_AI_LIMIT } from "@/lib/assistant/ai-fallback";
+import { recommend, type AiNotice } from "@/lib/assistant/recommend";
 import { toCompareHref } from "@/lib/compare/items";
 
 import { CriteriaSummary } from "./CriteriaSummary";
@@ -11,8 +12,8 @@ type Props = {
   query: string;
 };
 
-/** Mensaje cuando el pedido no tiene nada del catálogo: no se consulta la base. */
-async function OffTopic() {
+/** Mensaje cuando el pedido no tiene nada del catálogo. */
+async function OffTopic({ ai }: { ai?: AiNotice }) {
   const t = await getTranslations("assistant");
   return (
     <div role="status" className="mt-10 max-w-[60ch] border border-dashed border-rule-strong p-8">
@@ -20,20 +21,38 @@ async function OffTopic() {
         {t("offTopicTitle")}
       </h2>
       <p className="mt-2 text-ink-soft">{t("offTopicBody")}</p>
+      {ai === "signIn" ? (
+        <p className="mt-4">
+          {t("aiSignIn")}{" "}
+          <Link href="/sign-in" className="link-text">
+            {t("aiSignInLink")}
+          </Link>
+        </p>
+      ) : null}
+      {ai === "limit" ? (
+        <p className="mt-4">{t("aiLimit", { limit: DAILY_AI_LIMIT })}</p>
+      ) : null}
     </div>
   );
 }
 
 export async function AssistantResults({ query }: Props) {
-  const [result, t] = await Promise.all([recommend(query), getTranslations("assistant")]);
-  if (result.status === "offTopic") return <OffTopic />;
+  const locale = await getLocale();
+  const [result, t] = await Promise.all([
+    recommend(query, { aiFallback: createAiFallback(locale) }),
+    getTranslations("assistant"),
+  ]);
+  if (result.status === "offTopic") return <OffTopic ai={result.ai} />;
 
-  const { parsed, items, total, catalogHref } = result;
+  const { parsed, items, total, catalogHref, aiAssisted } = result;
   const compareHref = toCompareHref(items.slice(0, 4).map((item) => item.product.id));
 
   return (
     <section aria-labelledby="assistant-results" className="mt-10">
       <CriteriaSummary parsed={parsed} />
+      {aiAssisted ? (
+        <p className="mt-2 text-[0.875rem] text-ink-soft">{t("aiAssisted")}</p>
+      ) : null}
 
       <div className="mt-8 flex flex-wrap items-baseline justify-between gap-4">
         <h2 id="assistant-results" className="font-display text-[1.75rem] font-bold leading-tight">

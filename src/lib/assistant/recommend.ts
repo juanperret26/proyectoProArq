@@ -1,6 +1,7 @@
 import { toQueryString, type SearchFilters, type SearchRpcArgs, type SortOption } from "@/lib/catalog/filters";
 import { searchWithArgs, type SearchResult } from "@/lib/catalog/queries";
 
+import { mergeCriteria, type ExtractedCriteria } from "./extract";
 import { parseQuery, type ParsedQuery } from "./parse";
 import { rankProducts, type Priority, type RankCriteria, type RankedProduct } from "./rank";
 
@@ -65,8 +66,18 @@ export function toCatalogHref(parsed: ParsedQuery): string {
   return query ? `${path}?${query}` : path;
 }
 
+/** Por qué no se usó la IA cuando hacía falta: la interfaz lo explica. */
+export type AiNotice = "signIn" | "limit";
+
+export type AiOutcome =
+  | { status: "ok"; criteria: ExtractedCriteria }
+  | { status: AiNotice }
+  | { status: "unavailable" };
+
+export type AiFallback = (text: string) => Promise<AiOutcome>;
+
 export type Recommendation =
-  | { status: "offTopic"; parsed: ParsedQuery }
+  | { status: "offTopic"; parsed: ParsedQuery; ai?: AiNotice }
   | {
       status: "ok";
       parsed: ParsedQuery;
@@ -74,13 +85,19 @@ export type Recommendation =
       /** Coincidencias totales en la base, antes de recortar. */
       total: number;
       catalogHref: string;
+      /** true si los criterios los completó el modelo. */
+      aiAssisted: boolean;
     };
 
 /**
  * Arma la respuesta a partir de los candidatos. Si no se reconoció ningún
  * material y el texto libre no encontró nada, el pedido no es del catálogo.
  */
-export function toRecommendation(parsed: ParsedQuery, search: SearchResult): Recommendation {
+export function toRecommendation(
+  parsed: ParsedQuery,
+  search: SearchResult,
+  aiAssisted = false,
+): Recommendation {
   if (parsed.confidence !== "high" && search.items.length === 0) {
     return { status: "offTopic", parsed };
   }
@@ -90,15 +107,39 @@ export function toRecommendation(parsed: ParsedQuery, search: SearchResult): Rec
     items: rankProducts(search.items, toRankCriteria(parsed), RESULT_LIMIT),
     total: search.total,
     catalogHref: toCatalogHref(parsed),
+    aiAssisted,
   };
 }
 
+export interface RecommendDeps {
+  search?: (args: SearchRpcArgs) => Promise<SearchResult>;
+  /** Sin respaldo, el asistente funciona solo con reglas. */
+  aiFallback?: AiFallback;
+}
+
 /**
- * Recomendaciones sin IA: interpreta el pedido, trae candidatos reales y los
- * ordena. Un pedido sin nada del catálogo no consulta la base.
+ * Recomendaciones: interpreta el pedido con reglas, trae candidatos reales y
+ * los ordena. Solo si el texto libre no encuentra nada se consulta al modelo,
+ * una vez, y se vuelve a buscar con sus criterios. Saludos y textos sin
+ * contenido no consultan ni la base ni el modelo.
  */
-export async function recommend(text: string): Promise<Recommendation> {
+export async function recommend(
+  text: string,
+  { search = searchWithArgs, aiFallback }: RecommendDeps = {},
+): Promise<Recommendation> {
   const parsed = parseQuery(text);
   if (parsed.confidence === "none") return { status: "offTopic", parsed };
-  return toRecommendation(parsed, await searchWithArgs(toCandidateArgs(parsed)));
+
+  const first = toRecommendation(parsed, await search(toCandidateArgs(parsed)));
+  if (first.status === "ok" || !aiFallback) return first;
+
+  const outcome = await aiFallback(text);
+  if (outcome.status === "signIn" || outcome.status === "limit") {
+    return { status: "offTopic", parsed, ai: outcome.status };
+  }
+  if (outcome.status !== "ok") return first;
+
+  const merged = mergeCriteria(parsed, outcome.criteria);
+  if (merged.confidence === "none") return { status: "offTopic", parsed: merged };
+  return toRecommendation(merged, await search(toCandidateArgs(merged)), true);
 }

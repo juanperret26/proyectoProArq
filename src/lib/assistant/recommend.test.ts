@@ -1,13 +1,108 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
+import type { ProductSummary } from "@/lib/catalog/schemas";
+
+import type { ExtractedCriteria } from "./extract";
 import { parseQuery } from "./parse";
 import {
   CANDIDATE_LIMIT,
+  recommend,
   toCandidateArgs,
   toCatalogHref,
   toRankCriteria,
   toRecommendation,
+  type AiFallback,
 } from "./recommend";
+
+const MEMBRANE: ProductSummary = {
+  id: "p1",
+  name_en: "Bitumen membrane 4 mm",
+  name_es: null,
+  unit: "roll",
+  min_order_qty: 100,
+  lead_time_days: 20,
+  price_from_usd: 30,
+  image_urls: [],
+  category_slug: "waterproofing-membranes",
+  parent_category_slug: "insulation-roofing",
+  supplier_id: "s1",
+  supplier_slug: "s1",
+  supplier_name: "Supplier",
+  country_code: "TR",
+  is_verified: true,
+};
+
+const MODEL_CRITERIA: ExtractedCriteria = {
+  onTopic: true,
+  categorySlugs: ["waterproofing-membranes"],
+  searchTerms: null,
+  quantity: null,
+  unit: null,
+  budgetUsd: null,
+  countries: [],
+  certifications: [],
+  verifiedOnly: false,
+  priority: "balanced",
+};
+
+describe("recommend with an AI fallback", () => {
+  it("does not call the model when the rules already found a material", async () => {
+    const aiFallback = vi.fn<AiFallback>();
+    const search = vi.fn(async () => ({ items: [MEMBRANE], total: 1 }));
+
+    const result = await recommend("bitumen membrane", { search, aiFallback });
+
+    expect(aiFallback).not.toHaveBeenCalled();
+    expect(result.status).toBe("ok");
+  });
+
+  it("does not call the model for greetings or empty requests", async () => {
+    const aiFallback = vi.fn<AiFallback>();
+    const search = vi.fn();
+
+    const result = await recommend("hola, ¿cómo estás?", { search, aiFallback });
+
+    expect(result.status).toBe("offTopic");
+    expect(search).not.toHaveBeenCalled();
+    expect(aiFallback).not.toHaveBeenCalled();
+  });
+
+  it("asks the model when free text finds nothing and searches again with its criteria", async () => {
+    const search = vi
+      .fn()
+      .mockResolvedValueOnce({ items: [], total: 0 })
+      .mockResolvedValueOnce({ items: [MEMBRANE], total: 1 });
+    const aiFallback = vi.fn<AiFallback>(async () => ({ status: "ok", criteria: MODEL_CRITERIA }));
+
+    const result = await recommend("keep rainwater out of a flat terrace", { search, aiFallback });
+
+    expect(aiFallback).toHaveBeenCalledOnce();
+    expect(search.mock.calls[1][0].category_slugs).toEqual(["waterproofing-membranes"]);
+    expect(result).toMatchObject({ status: "ok", aiAssisted: true });
+  });
+
+  it("reports the daily limit instead of calling the model again", async () => {
+    const search = vi.fn(async () => ({ items: [], total: 0 }));
+    const aiFallback = vi.fn<AiFallback>(async () => ({ status: "limit" }));
+
+    const result = await recommend("keep rainwater out of a flat terrace", { search, aiFallback });
+
+    expect(result).toMatchObject({ status: "offTopic", ai: "limit" });
+  });
+
+  it("treats a request the model marks as off-topic as off-topic", async () => {
+    const search = vi.fn(async () => ({ items: [], total: 0 }));
+    const aiFallback = vi.fn<AiFallback>(async () => ({
+      status: "ok",
+      criteria: { ...MODEL_CRITERIA, onTopic: false },
+    }));
+
+    const result = await recommend("escribime un poema", { search, aiFallback });
+
+    expect(result.status).toBe("offTopic");
+    expect(search).toHaveBeenCalledOnce();
+  });
+});
 
 describe("toRecommendation", () => {
   it("treats free text that matches nothing in the catalog as off-topic", () => {

@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { CompareAnalysis } from "@/components/compare/CompareAnalysis";
 import { CompareFromStorage } from "@/components/compare/CompareFromStorage";
 import { CompareTable } from "@/components/compare/CompareTable";
 import { Link } from "@/i18n/navigation";
+import { DAILY_AI_LIMIT, geminiConfig } from "@/lib/ai/quota";
 import { getProductsByIds } from "@/lib/catalog/queries";
+import { pickLocalized } from "@/lib/i18n/localized";
 import { COMPARE_TITLE_ID, parseCompareIds } from "@/lib/compare/items";
 
 type Props = {
@@ -46,7 +49,11 @@ async function CompareContent({ searchParams }: Props) {
 }
 
 async function CompareResult({ ids }: { ids: string[] }) {
-  const [products, t] = await Promise.all([getProductsByIds(ids), getTranslations("compare")]);
+  const [products, t, locale] = await Promise.all([
+    getProductsByIds(ids),
+    getTranslations("compare"),
+    getLocale(),
+  ]);
 
   if (products.length === 0) {
     return (
@@ -68,6 +75,18 @@ async function CompareResult({ ids }: { ids: string[] }) {
         <p className="mb-4 max-w-[60ch] text-ink-soft">{t("addOneMore")}</p>
       ) : null}
       <CompareTable products={products} />
+      {products.length >= 2 && geminiConfig() ? (
+        <CompareAnalysis
+          ids={products.map((product) => product.id)}
+          names={Object.fromEntries(
+            products.map((product) => [
+              product.id,
+              `${pickLocalized(locale, product.name_en, product.name_es)} · ${product.supplier.name}`,
+            ]),
+          )}
+          dailyLimit={DAILY_AI_LIMIT}
+        />
+      ) : null}
       <p className="mt-4">
         <Link href="/search" className="link-text">
           {t("browse")}
