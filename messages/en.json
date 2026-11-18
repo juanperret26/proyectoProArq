@@ -232,5 +232,53 @@
       "answered": "Answered",
       "closed": "Closed"
     }
+  },
+  "assistant": {
+    "title": "Describe what you need",
+    "lead": "Write the material, quantity, budget and where you prefer to buy from. The assistant picks real products from the catalog and tells you why each one fits.",
+    "label": "Your request",
+    "placeholder": "e.g. 500 m² porcelain tile from Vietnam, cheapest",
+    "submit": "Find products",
+    "hint": "Up to {max} characters. Works in English or Spanish.",
+    "examplesTitle": "Try an example",
+    "examples": {
+      "tiles": "500 m² porcelain tile from Vietnam, cheapest",
+      "cement": "200 bags of portland cement, urgent, not from China",
+      "lighting": "LED lighting under $15, CE certified",
+      "toilets": "Toilets from verified suppliers"
+    },
+    "offTopicTitle": "I can only help with construction materials",
+    "offTopicBody": "Name a material, for example tiles, cement, rebar, faucets or LED lights. You can add quantity, budget and countries.",
+    "criteriaTitle": "What I understood",
+    "criteria": {
+      "material": "Material",
+      "quantity": "Quantity",
+      "budget": "Budget",
+      "budgetValue": "Up to {price} per unit",
+      "countries": "Ships from",
+      "certifications": "Certifications",
+      "verified": "Verified suppliers only",
+      "yes": "Yes",
+      "priority": "Priority"
+    },
+    "priority": {
+      "price": "Lowest price",
+      "lead_time": "Shortest lead time",
+      "balanced": "Price and lead time"
+    },
+    "resultsTitle": "{count, plural, =0 {No recommendations} one {# recommendation} other {# recommendations}} out of {total, plural, one {# match} other {# matches}}",
+    "compareTop": "Compare the top {count}",
+    "adjustInCatalog": "Adjust filters in the catalog",
+    "noResultsTitle": "No products match this request",
+    "noResultsBody": "Try a higher budget, more countries or fewer certifications, or adjust the filters in the catalog.",
+    "reasonsLabel": "Why this product",
+    "reasons": {
+      "cheapest": "Lowest price",
+      "fastest": "Shortest lead time",
+      "verified": "Verified supplier",
+      "withinBudget": "Within budget",
+      "meetsMinOrder": "Your quantity meets the minimum order",
+      "minOrderAboveQuantity": "Minimum order is above your quantity"
+    }
   }
 }

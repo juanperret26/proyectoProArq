@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createPublicClient } from "@/lib/supabase/public-client";
 
 import { lookupCategory } from "./category-lookup";
-import { toSearchRpcArgs, type SearchFilters } from "./filters";
+import { toSearchRpcArgs, type SearchFilters, type SearchRpcArgs } from "./filters";
 import {
   certificationOptionSchema,
   countrySchema,
@@ -54,10 +54,12 @@ export async function searchProducts(
   filters: SearchFilters,
   category: string | null = filters.category,
 ): Promise<SearchResult> {
-  const { data, error } = await createPublicClient().rpc(
-    "search_products",
-    toSearchRpcArgs(filters, category),
-  );
+  return searchWithArgs(toSearchRpcArgs(filters, category));
+}
+
+/** Búsqueda con los argumentos de `search_products` ya armados (la usa el asistente). */
+export async function searchWithArgs(args: SearchRpcArgs): Promise<SearchResult> {
+  const { data, error } = await createPublicClient().rpc("search_products", { ...args });
   if (error) fail("buscar productos", error);
   const rows = z.array(searchRowSchema).parse(data);
   return {

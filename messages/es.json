@@ -232,5 +232,53 @@
       "answered": "Respondida",
       "closed": "Cerrada"
     }
+  },
+  "assistant": {
+    "title": "Describa lo que necesita",
+    "lead": "Escriba el material, la cantidad, el presupuesto y de dónde prefiere comprar. El asistente elige productos reales del catálogo y le explica por qué le sirve cada uno.",
+    "label": "Su pedido",
+    "placeholder": "p. ej. 500 m² de porcelanato de Vietnam, el más barato",
+    "submit": "Buscar productos",
+    "hint": "Hasta {max} caracteres. Funciona en español o en inglés.",
+    "examplesTitle": "Pruebe con un ejemplo",
+    "examples": {
+      "tiles": "500 m² de porcelanato de Vietnam, el más barato",
+      "cement": "200 bolsas de cemento portland, urgente, que no sea de China",
+      "lighting": "Iluminación LED de menos de $15, con certificación CE",
+      "toilets": "Inodoros de proveedores verificados"
+    },
+    "offTopicTitle": "Solo puedo ayudarle con materiales de construcción",
+    "offTopicBody": "Nombre un material, por ejemplo porcelanato, cemento, hierro, griferías o luces LED. Puede agregar cantidad, presupuesto y países.",
+    "criteriaTitle": "Lo que entendí",
+    "criteria": {
+      "material": "Material",
+      "quantity": "Cantidad",
+      "budget": "Presupuesto",
+      "budgetValue": "Hasta {price} por unidad",
+      "countries": "Se envía desde",
+      "certifications": "Certificaciones",
+      "verified": "Solo proveedores verificados",
+      "yes": "Sí",
+      "priority": "Prioridad"
+    },
+    "priority": {
+      "price": "Menor precio",
+      "lead_time": "Menor plazo de entrega",
+      "balanced": "Precio y plazo"
+    },
+    "resultsTitle": "{count, plural, =0 {Ninguna recomendación} one {# recomendación} other {# recomendaciones}} entre {total, plural, one {# coincidencia} other {# coincidencias}}",
+    "compareTop": "Comparar los {count} primeros",
+    "adjustInCatalog": "Ajustar filtros en el catálogo",
+    "noResultsTitle": "Ningún producto coincide con este pedido",
+    "noResultsBody": "Pruebe con un presupuesto mayor, más países o menos certificaciones, o ajuste los filtros en el catálogo.",
+    "reasonsLabel": "Por qué este producto",
+    "reasons": {
+      "cheapest": "Menor precio",
+      "fastest": "Menor plazo de entrega",
+      "verified": "Proveedor verificado",
+      "withinBudget": "Dentro del presupuesto",
+      "meetsMinOrder": "Su cantidad cumple el pedido mínimo",
+      "minOrderAboveQuantity": "El pedido mínimo supera su cantidad"
+    }
   }
 }
