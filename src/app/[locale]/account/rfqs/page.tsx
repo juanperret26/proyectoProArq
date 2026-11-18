@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { Link } from "@/i18n/navigation";
 import { listRfqs } from "@/lib/account/queries";
-import { formatQuantity } from "@/lib/catalog/format";
+import { quantityWithUnit } from "@/lib/catalog/format";
 import { pickLocalized } from "@/lib/i18n/localized";
 import { getUserDb } from "@/lib/supabase/user-client";
 
@@ -64,10 +64,7 @@ async function RfqsContent() {
                     </Link>{" "}
                     <span className="tabular-nums text-ink-soft">
                       ×{" "}
-                      {formatQuantity(locale, item.quantity)}{" "}
-                      {c.has(`units.${item.product.unit}`)
-                        ? c(`units.${item.product.unit}`)
-                        : item.product.unit}
+                      {quantityWithUnit(c, item.product.unit, item.quantity, locale)}
                     </span>
                   </li>
                 ))}

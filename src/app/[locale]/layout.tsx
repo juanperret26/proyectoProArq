@@ -10,6 +10,7 @@ import { CompareTray } from "@/components/compare/CompareTray";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { routing } from "@/i18n/routing";
+import { siteUrl } from "@/lib/seo/site";
 import "../globals.css";
 
 const sofia = Sofia_Sans({
@@ -47,9 +48,18 @@ export async function generateMetadata({
 
   const t = await getTranslations({ locale, namespace: "meta" });
 
+  const base = siteUrl();
   return {
+    metadataBase: new URL(base),
     title: { default: t("title"), template: "%s | ProArq" },
     description: t("description"),
+    // La dirección canónica y las traducciones las define cada página: si el layout
+    // las fijara, todas heredarían las de la portada.
+    openGraph: {
+      siteName: "ProArq",
+      type: "website",
+      locale: locale === "es" ? "es_AR" : "en_US",
+    },
   };
 }
 

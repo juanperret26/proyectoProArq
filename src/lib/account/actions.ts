@@ -7,15 +7,13 @@ import { redirect } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { getUserDb } from "@/lib/supabase/user-client";
 
-import { parseForm, profileSchema, rfqSchema, type FormErrors } from "./validation";
+import { parseForm, profileSchema, rfqErrors, rfqSchema, type FormErrors } from "./validation";
 
 export type FormState =
   | { status: "idle" }
   | { status: "saved" }
   | { status: "error"; errors: FormErrors };
 
-/** Código SQL que create_rfq usa cuando la cantidad no llega al pedido mínimo. */
-const MIN_ORDER_ERROR = "22023";
 const IDLE: FormState = { status: "idle" };
 const GENERIC_ERROR: FormState = { status: "error", errors: { form: "invalid" } };
 
@@ -100,9 +98,7 @@ export async function createRfq(_prev: FormState, formData: FormData): Promise<F
   });
   if (error) {
     console.error("createRfq", error.code, error.message);
-    return error.code === MIN_ORDER_ERROR
-      ? { status: "error", errors: { quantity: "quantityBelowMin" } }
-      : GENERIC_ERROR;
+    return { status: "error", errors: rfqErrors(error.code) };
   }
 
   revalidatePath("/[locale]/account/rfqs", "page");

@@ -98,6 +98,16 @@
       "box": "caja",
       "set": "juego"
     },
+    "quantityUnits": {
+      "m2": "{count, number} m²",
+      "ton": "{count, plural, one {# tonelada} other {# toneladas}}",
+      "piece": "{count, plural, one {# pieza} other {# piezas}}",
+      "bag": "{count, plural, one {# bolsa} other {# bolsas}}",
+      "sheet": "{count, plural, one {# paño} other {# paños}}",
+      "roll": "{count, plural, one {# rollo} other {# rollos}}",
+      "box": "{count, plural, one {# caja} other {# cajas}}",
+      "set": "{count, plural, one {# juego} other {# juegos}}"
+    },
     "featuredTitle": "Productos de proveedores verificados",
     "featuredAll": "Ver todos los productos"
   },
@@ -162,7 +172,7 @@
     "priceTiers": "Precio según cantidad",
     "quantity": "Cantidad",
     "unitPrice": "Precio unitario (USD)",
-    "tierQty": "{qty} {unit} o más",
+    "tierQty": "{quantity} o más",
     "specs": "Especificaciones",
     "description": "Descripción",
     "supplier": "Proveedor",
@@ -237,6 +247,7 @@
       "destinationTooLong": "El destino es demasiado largo.",
       "quantityInvalid": "Ingrese una cantidad mayor que cero.",
       "quantityBelowMin": "La cantidad es menor que el pedido mínimo de este proveedor.",
+      "rateLimited": "Envió muchas solicitudes de cotización en la última hora. Intente de nuevo más tarde.",
       "invalid": "Algo salió mal. Revise el formulario e intente de nuevo."
     }
   },
@@ -244,7 +255,7 @@
     "title": "Solicitar cotización",
     "lead": "Pida a {supplier} una cotización de {product}.",
     "quantity": "Cantidad ({unit})",
-    "minOrderHint": "Pedido mínimo: {qty} {unit}.",
+    "minOrderHint": "Pedido mínimo: {quantity}.",
     "destination": "Destino de entrega",
     "destinationPlaceholder": "Ciudad y país",
     "message": "Mensaje para el proveedor",

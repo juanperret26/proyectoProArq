@@ -1,6 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import { loginSchema, parseForm, profileSchema, rfqSchema, safeNextPath, signupSchema } from "./validation";
+import {
+  loginSchema,
+  parseForm,
+  profileSchema,
+  rfqErrors,
+  rfqSchema,
+  safeNextPath,
+  signupSchema,
+} from "./validation";
 
 function form(values: Record<string, string>): FormData {
   const data = new FormData();
@@ -9,6 +17,23 @@ function form(values: Record<string, string>): FormData {
 }
 
 const PRODUCT_ID = "11111111-1111-4111-8111-111111111111";
+
+describe("rfqErrors", () => {
+  test("maps the minimum-order code to a quantity error", () => {
+    expect(rfqErrors("22023")).toEqual({ quantity: "quantityBelowMin" });
+  });
+
+  test("maps the rate-limit code to a form error", () => {
+    expect(rfqErrors("PT429")).toEqual({ form: "rateLimited" });
+    // 54000 lo lanza Postgres por otros límites internos: no es el tope de pedidos.
+    expect(rfqErrors("54000")).toEqual({ form: "invalid" });
+  });
+
+  test("falls back to a generic error for any other or missing code", () => {
+    expect(rfqErrors("23505")).toEqual({ form: "invalid" });
+    expect(rfqErrors(undefined)).toEqual({ form: "invalid" });
+  });
+});
 
 describe("safeNextPath", () => {
   test("acepta rutas propias", () => {

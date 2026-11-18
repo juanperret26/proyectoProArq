@@ -8,6 +8,7 @@ import { ResultsSkeleton } from "@/components/catalog/CatalogResults";
 import { Link } from "@/i18n/navigation";
 import { MAX_QUERY_LENGTH } from "@/lib/assistant/parse";
 import type { RawSearchParams } from "@/lib/catalog/filters";
+import { alternatesFor, siteUrl } from "@/lib/seo/site";
 
 type Props = {
   searchParams: Promise<RawSearchParams>;
@@ -18,7 +19,7 @@ const EXAMPLE_KEYS = ["tiles", "cement", "lighting", "toilets"] as const;
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "assistant" });
-  return { title: t("title") };
+  return { title: t("title"), alternates: alternatesFor(siteUrl(), locale, "/assistant") };
 }
 
 export default function AssistantPage({ searchParams }: Props) {

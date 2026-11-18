@@ -1,6 +1,10 @@
 import { SignIn } from "@clerk/nextjs";
+import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { Suspense } from "react";
+
+/** La página de ingreso no aporta nada en los buscadores. */
+export const metadata: Metadata = { robots: { index: false } };
 
 export default function SignInPage() {
   return (

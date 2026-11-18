@@ -1,7 +1,8 @@
 import { BadgeCheck } from "lucide-react";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { cache, Suspense } from "react";
 
 import { ProductActions } from "@/components/account/ProductActions";
 import { Breadcrumb } from "@/components/catalog/Breadcrumb";
@@ -9,13 +10,32 @@ import { CategoryGlyph } from "@/components/CategoryGlyph";
 import { CompareButton } from "@/components/compare/CompareButton";
 import { Link } from "@/i18n/navigation";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
-import { countryName, formatQuantity, formatUsd } from "@/lib/catalog/format";
+import { countryName, formatUsd, quantityWithUnit } from "@/lib/catalog/format";
 import { getProductDetail } from "@/lib/catalog/queries";
 import { pickLocalized } from "@/lib/i18n/localized";
+import { alternatesFor, siteUrl, truncateDescription } from "@/lib/seo/site";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
+
+/** La ficha y sus metadatos piden el mismo producto: se consulta una sola vez por pedido. */
+const loadProduct = cache(getProductDetail);
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const [{ id }, locale] = await Promise.all([params, getLocale()]);
+  const product = await loadProduct(id);
+  if (!product) return {};
+  const name = pickLocalized(locale, product.name_en, product.name_es);
+  const description = pickLocalized(locale, product.description_en, product.description_es);
+  const summary = truncateDescription(description);
+  return {
+    title: name,
+    description: summary,
+    alternates: alternatesFor(siteUrl(), locale, `/products/${id}`),
+    openGraph: { title: name, description: summary },
+  };
+}
 
 export default function ProductPage({ params }: Props) {
   return (
@@ -31,7 +51,7 @@ export default function ProductPage({ params }: Props) {
 
 async function ProductContent({ params }: Props) {
   const { id } = await params;
-  const product = await getProductDetail(id);
+  const product = await loadProduct(id);
   if (!product) notFound();
 
   const [locale, t, home, c] = await Promise.all([
@@ -40,7 +60,6 @@ async function ProductContent({ params }: Props) {
     getTranslations("header"),
     getTranslations("catalog"),
   ]);
-  const unit = c.has(`units.${product.unit}`) ? c(`units.${product.unit}`) : product.unit;
   const name = pickLocalized(locale, product.name_en, product.name_es);
   const category = product.category;
   const match = lookupCategory(category.slug);
@@ -138,7 +157,7 @@ async function ProductContent({ params }: Props) {
                 {product.price_tiers.map((tier) => (
                   <tr key={tier.min_qty} className="border-t border-rule">
                     <td className="px-5 py-3 tabular-nums">
-                      {t("tierQty", { qty: formatQuantity(locale, tier.min_qty), unit })}
+                      {t("tierQty", { quantity: quantityWithUnit(c, product.unit, tier.min_qty, locale) })}
                     </td>
                     <td className="px-5 py-3 text-right font-display text-[1.5rem] font-bold tabular-nums">
                       {formatUsd(locale, tier.unit_price_usd)}
@@ -153,7 +172,7 @@ async function ProductContent({ params }: Props) {
             <div>
               <dt className="text-ink-soft">{t("minOrder")}</dt>
               <dd className="font-semibold tabular-nums">
-                {formatQuantity(locale, product.min_order_qty)} {unit}
+                {quantityWithUnit(c, product.unit, product.min_order_qty, locale)}
               </dd>
             </div>
             <div>

@@ -10,6 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { allCategorySlugs, lookupCategory } from "@/lib/catalog/category-lookup";
 import { parseSearchFilters, type RawSearchParams } from "@/lib/catalog/filters";
 import { pickLocalized } from "@/lib/i18n/localized";
+import { alternatesFor, siteUrl } from "@/lib/seo/site";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -24,8 +25,12 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
   const { slug } = await params;
   const match = lookupCategory(slug);
   if (!match) return {};
+  const locale = await getLocale();
+  const title = pickLocalized(locale, match.entry.nameEn, match.entry.nameEs);
   return {
-    title: pickLocalized(await getLocale(), match.entry.nameEn, match.entry.nameEs),
+    title,
+    alternates: alternatesFor(siteUrl(), locale, `/categories/${slug}`),
+    openGraph: { title },
   };
 }
 

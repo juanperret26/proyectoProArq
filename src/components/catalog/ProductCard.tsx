@@ -5,7 +5,7 @@ import { CategoryGlyph } from "@/components/CategoryGlyph";
 import { CompareButton } from "@/components/compare/CompareButton";
 import { Link } from "@/i18n/navigation";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
-import { countryName, formatQuantity, formatUsd } from "@/lib/catalog/format";
+import { countryName, formatUsd, quantityWithUnit } from "@/lib/catalog/format";
 import type { ProductSummary } from "@/lib/catalog/schemas";
 import { pickLocalized } from "@/lib/i18n/localized";
 
@@ -60,7 +60,7 @@ export async function ProductCard({ product }: Props) {
           <div>
             <dt className="text-ink-soft">{t("card.moq")}</dt>
             <dd className="font-semibold tabular-nums">
-              {formatQuantity(locale, product.min_order_qty)} {unit}
+              {quantityWithUnit(t, product.unit, product.min_order_qty, locale)}
             </dd>
           </div>
           <div>

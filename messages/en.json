@@ -98,6 +98,16 @@
       "box": "box",
       "set": "set"
     },
+    "quantityUnits": {
+      "m2": "{count, number} m²",
+      "ton": "{count, plural, one {# ton} other {# tons}}",
+      "piece": "{count, plural, one {# piece} other {# pieces}}",
+      "bag": "{count, plural, one {# bag} other {# bags}}",
+      "sheet": "{count, plural, one {# sheet} other {# sheets}}",
+      "roll": "{count, plural, one {# roll} other {# rolls}}",
+      "box": "{count, plural, one {# box} other {# boxes}}",
+      "set": "{count, plural, one {# set} other {# sets}}"
+    },
     "featuredTitle": "Products from verified suppliers",
     "featuredAll": "See all products"
   },
@@ -162,7 +172,7 @@
     "priceTiers": "Price by quantity",
     "quantity": "Quantity",
     "unitPrice": "Unit price (USD)",
-    "tierQty": "{qty} {unit} or more",
+    "tierQty": "{quantity} or more",
     "specs": "Specifications",
     "description": "Description",
     "supplier": "Supplier",
@@ -237,6 +247,7 @@
       "destinationTooLong": "The destination is too long.",
       "quantityInvalid": "Enter a quantity greater than zero.",
       "quantityBelowMin": "The quantity is below this supplier's minimum order.",
+      "rateLimited": "You have sent many quote requests in the last hour. Please try again later.",
       "invalid": "Something went wrong. Please check the form and try again."
     }
   },
@@ -244,7 +255,7 @@
     "title": "Request a quote",
     "lead": "Ask {supplier} for a quote on {product}.",
     "quantity": "Quantity ({unit})",
-    "minOrderHint": "Minimum order: {qty} {unit}.",
+    "minOrderHint": "Minimum order: {quantity}.",
     "destination": "Delivery destination",
     "destinationPlaceholder": "City and country",
     "message": "Message to the supplier",

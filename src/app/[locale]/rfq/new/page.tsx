@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { RfqForm } from "@/components/account/RfqForm";
+import { quantityWithUnit } from "@/lib/catalog/format";
 import { getProductDetail } from "@/lib/catalog/queries";
 import { pickLocalized } from "@/lib/i18n/localized";
 
@@ -47,6 +48,7 @@ async function NewRfqContent({ searchParams }: Props) {
         locale={locale}
         unit={unit}
         minOrder={product.min_order_qty}
+        minOrderLabel={quantityWithUnit(c, product.unit, product.min_order_qty, locale)}
       />
     </>
   );

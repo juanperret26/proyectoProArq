@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import type { ParsedQuery } from "@/lib/assistant/parse";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
-import { countryName, formatQuantity, formatUsd } from "@/lib/catalog/format";
+import { countryName, formatQuantity, formatUsd, quantityWithUnit } from "@/lib/catalog/format";
 import { pickLocalized } from "@/lib/i18n/localized";
 
 type Props = {
@@ -21,13 +21,16 @@ export async function CriteriaSummary({ parsed }: Props) {
     const match = lookupCategory(slug);
     return match ? [pickLocalized(locale, match.entry.nameEn, match.entry.nameEs)] : [];
   });
-  const unit = parsed.unit ? tCatalog(`units.${parsed.unit}`) : "";
 
   const rows: [string, string][] = [
     [t("criteria.material"), materials.join(", ") || (parsed.searchTerms?.split(" or ").join(", ") ?? "")],
     [
       t("criteria.quantity"),
-      parsed.quantity !== null ? `${formatQuantity(locale, parsed.quantity)} ${unit}`.trim() : "",
+      parsed.quantity === null
+        ? ""
+        : parsed.unit
+          ? quantityWithUnit(tCatalog, parsed.unit, parsed.quantity, locale)
+          : formatQuantity(locale, parsed.quantity),
     ],
     [
       t("criteria.budget"),

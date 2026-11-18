@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { CatalogResults, ResultsSkeleton } from "@/components/catalog/CatalogResults";
 import { parseSearchFilters, type RawSearchParams } from "@/lib/catalog/filters";
+import { alternatesFor, siteUrl } from "@/lib/seo/site";
 
 type Props = {
   searchParams: Promise<RawSearchParams>;
@@ -12,7 +13,7 @@ type Props = {
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "catalog" });
-  return { title: t("searchTitle") };
+  return { title: t("searchTitle"), alternates: alternatesFor(siteUrl(), locale, "/search") };
 }
 
 export default function SearchPage({ searchParams }: Props) {

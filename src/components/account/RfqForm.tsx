@@ -10,9 +10,16 @@ import { FormField, INPUT_CLASS } from "./FormField";
 
 const INITIAL: FormState = { status: "idle" };
 
-type Props = { productId: string; locale: string; unit: string; minOrder: number };
+type Props = {
+  productId: string;
+  locale: string;
+  unit: string;
+  minOrder: number;
+  /** Pedido mínimo ya formateado con su unidad en singular o plural. */
+  minOrderLabel: string;
+};
 
-export function RfqForm({ productId, locale, unit, minOrder }: Props) {
+export function RfqForm({ productId, locale, unit, minOrder, minOrderLabel }: Props) {
   const t = useTranslations("rfq");
   const a = useTranslations("account");
   const [state, formAction, pending] = useActionState(createRfq, INITIAL);
@@ -29,7 +36,7 @@ export function RfqForm({ productId, locale, unit, minOrder }: Props) {
       <FormField
         id="quantity"
         label={t("quantity", { unit })}
-        hint={t("minOrderHint", { qty: minOrder, unit })}
+        hint={t("minOrderHint", { quantity: minOrderLabel })}
         error={message("quantity")}
       >
         {(p) => (

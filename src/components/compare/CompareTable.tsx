@@ -18,12 +18,7 @@ export async function CompareTable({ products }: Props) {
     getTranslations("compare"),
     getTranslations("catalog"),
   ]);
-  const context = {
-    locale,
-    compare,
-    catalog,
-    unit: (code: string) => (catalog.has(`units.${code}`) ? catalog(`units.${code}`) : code),
-  };
+  const context = { locale, compare, catalog };
   const rows: CompareRow[] = [
     ...commercialRows(products, context),
     ...supplierRows(products, context),

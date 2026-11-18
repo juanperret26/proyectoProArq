@@ -1,17 +1,36 @@
 import { BadgeCheck } from "lucide-react";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { cache, Suspense } from "react";
 
 import { Breadcrumb } from "@/components/catalog/Breadcrumb";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { countryName } from "@/lib/catalog/format";
 import { getSupplierDetail, getSupplierProducts } from "@/lib/catalog/queries";
 import { pickLocalized } from "@/lib/i18n/localized";
+import { alternatesFor, siteUrl, truncateDescription } from "@/lib/seo/site";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+/** La ficha y sus metadatos piden el mismo proveedor: se consulta una sola vez por pedido. */
+const loadSupplier = cache(getSupplierDetail);
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+  const supplier = await loadSupplier(slug);
+  if (!supplier) return {};
+  const description = pickLocalized(locale, supplier.description_en, supplier.description_es);
+  const summary = truncateDescription(description);
+  return {
+    title: supplier.name,
+    description: summary,
+    alternates: alternatesFor(siteUrl(), locale, `/suppliers/${slug}`),
+    openGraph: { title: supplier.name, description: summary },
+  };
+}
 
 export default function SupplierPage({ params }: Props) {
   return (
@@ -27,7 +46,7 @@ export default function SupplierPage({ params }: Props) {
 
 async function SupplierContent({ params }: Props) {
   const { slug } = await params;
-  const supplier = await getSupplierDetail(slug);
+  const supplier = await loadSupplier(slug);
   if (!supplier) notFound();
 
   const [products, locale, t, home] = await Promise.all([

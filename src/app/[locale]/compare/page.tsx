@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { DAILY_AI_LIMIT, geminiConfig } from "@/lib/ai/quota";
 import { getProductsByIds } from "@/lib/catalog/queries";
 import { pickLocalized } from "@/lib/i18n/localized";
+import { alternatesFor, siteUrl } from "@/lib/seo/site";
 import { COMPARE_TITLE_ID, parseCompareIds } from "@/lib/compare/items";
 
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const t = await getTranslations({ locale, namespace: "compare" });
-  return { title: t("title") };
+  return { title: t("title"), alternates: alternatesFor(siteUrl(), locale, "/compare") };
 }
 
 export default function ComparePage({ searchParams }: Props) {

@@ -15,6 +15,7 @@ export type FieldErrorCode =
   | "destinationTooLong"
   | "quantityInvalid"
   | "quantityBelowMin"
+  | "rateLimited"
   | "invalid";
 
 const text = (value: FormDataEntryValue | null): string =>
@@ -69,6 +70,17 @@ export function parseForm<T>(
     errors[field] ??= issue.message as FieldErrorCode;
   }
   return { ok: false, errors };
+}
+
+/** Códigos SQL que create_rfq usa: cantidad bajo el pedido mínimo y tope de pedidos por hora. */
+export const MIN_ORDER_ERROR = "22023";
+export const RATE_LIMIT_ERROR = "PT429";
+
+/** Traduce el código de error de create_rfq a los errores que ve la persona. */
+export function rfqErrors(code: string | undefined): FormErrors {
+  if (code === MIN_ORDER_ERROR) return { quantity: "quantityBelowMin" };
+  if (code === RATE_LIMIT_ERROR) return { form: "rateLimited" };
+  return { form: "invalid" };
 }
 
 /**

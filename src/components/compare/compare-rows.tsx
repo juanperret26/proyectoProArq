@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { countryName, formatQuantity, formatUsd } from "@/lib/catalog/format";
+import { countryName, formatUsd, quantityWithUnit, type QuantityTranslator } from "@/lib/catalog/format";
 import type { ProductDetail } from "@/lib/catalog/schemas";
 import { bestIndexes, type BestDirection } from "@/lib/compare/best";
 
@@ -18,9 +18,7 @@ export interface CompareRow {
 interface RowContext {
   locale: string;
   compare: Translate;
-  catalog: Translate;
-  /** Nombre traducido de una unidad de venta (m2, ton, ...). */
-  unit: (code: string) => string;
+  catalog: Translate & QuantityTranslator;
 }
 
 function rankBy(
@@ -32,7 +30,6 @@ function rankBy(
 }
 
 function priceTiersCell(product: ProductDetail, context: RowContext): ReactNode {
-  const unit = context.unit(product.unit);
   return (
     <ul className="flex flex-col gap-1">
       {[...product.price_tiers]
@@ -42,7 +39,7 @@ function priceTiersCell(product: ProductDetail, context: RowContext): ReactNode 
             <span className="font-semibold">{formatUsd(context.locale, tier.unit_price_usd)}</span>
             <span className="text-ink-soft">
               {" "}
-              · {formatQuantity(context.locale, tier.min_qty)}+ {unit}
+              · {quantityWithUnit(context.catalog, product.unit, tier.min_qty, context.locale)}+
             </span>
           </li>
         ))}
@@ -69,9 +66,8 @@ export function commercialRows(
     {
       key: "moq",
       label: context.compare("rows.moq"),
-      cells: products.map(
-        (product) =>
-          `${formatQuantity(context.locale, product.min_order_qty)} ${context.unit(product.unit)}`,
+      cells: products.map((product) =>
+        quantityWithUnit(context.catalog, product.unit, product.min_order_qty, context.locale),
       ),
       best: sameUnit ? rankBy(products, (p) => p.min_order_qty, "min") : [],
       note: unitNote,

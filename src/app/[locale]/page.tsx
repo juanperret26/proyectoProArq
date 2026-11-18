@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { FeaturedProducts } from "@/components/catalog/FeaturedProducts";
@@ -5,11 +6,21 @@ import { CategoryGlyph } from "@/components/CategoryGlyph";
 import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
 import { pickLocalized } from "@/lib/i18n/localized";
+import { alternatesFor, siteUrl } from "@/lib/seo/site";
 
 const STEP_KEYS = ["search", "compare", "quote"] as const;
 
 /** Separación entre el trazado de un símbolo y el siguiente, en milisegundos. */
 const PLOT_STAGGER_MS = 70;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations({ locale, namespace: "meta" });
+  return {
+    alternates: alternatesFor(siteUrl(), locale, "/"),
+    openGraph: { title: t("title"), description: t("description") },
+  };
+}
 
 export default async function HomePage() {
   const t = await getTranslations("home");
