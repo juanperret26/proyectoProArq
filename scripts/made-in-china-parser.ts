@@ -39,16 +39,33 @@ const UNIT_CODES: Readonly<Record<string, string>> = {
   "square meters": "m2",
   piece: "piece",
   pieces: "piece",
+  pc: "piece",
+  pcs: "piece",
   ton: "ton",
   tons: "ton",
   "metric ton": "ton",
   "metric tons": "ton",
+  bag: "bag",
+  bags: "bag",
+  sheet: "sheet",
+  sheets: "sheet",
+  roll: "roll",
+  rolls: "roll",
+  box: "box",
+  boxes: "box",
+  set: "set",
+  sets: "set",
 };
 
 const UNIT_LABELS: Readonly<Record<string, { en: string; es: string }>> = {
   m2: { en: "m²", es: "m²" },
   piece: { en: "pieces", es: "piezas" },
   ton: { en: "tons", es: "toneladas" },
+  bag: { en: "bags", es: "bolsas" },
+  sheet: { en: "sheets", es: "chapas" },
+  roll: { en: "rolls", es: "rollos" },
+  box: { en: "boxes", es: "cajas" },
+  set: { en: "sets", es: "juegos" },
 };
 
 /** Especificaciones que el sitio repite en todos los productos y no informan. */
@@ -65,7 +82,29 @@ const SPEC_LABELS_ES: Readonly<Record<string, string>> = {
   usage: "Uso",
   shape: "Forma",
   "water absorption": "Absorción de agua",
+  "surface finishing": "Acabado superficial",
+  grade: "Grado",
+  alloy: "Aleación",
+  standard: "Norma",
+  weight: "Peso",
+  diameter: "Diámetro",
+  length: "Largo",
+  width: "Ancho",
+  height: "Alto",
+  application: "Aplicación",
+  brand: "Marca",
+  capacity: "Capacidad",
+  power: "Potencia",
+  voltage: "Voltaje",
+  temper: "Temple",
+  "wall thickness": "Espesor de pared",
+  package: "Embalaje",
 };
+
+/** Etiqueta de especificación en español; si no hay traducción conocida queda en inglés. */
+export function specLabelEs(label: string): string {
+  return SPEC_LABELS_ES[label.toLowerCase()] ?? label;
+}
 
 const NAMED_ENTITIES: Readonly<Record<string, string>> = {
   amp: "&",
@@ -244,7 +283,7 @@ export function parseMinOrder(raw: string): { qty: number; unit: string } {
   return { qty, unit };
 }
 
-function slugify(value: string): string {
+export function slugify(value: string): string {
   return value
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
@@ -253,7 +292,7 @@ function slugify(value: string): string {
     .replace(/^-|-$/g, "");
 }
 
-function normalizeText(value: string): string {
+export function normalizeText(value: string): string {
   return decodeHtmlEntities(value).replace(/\s+/g, " ").trim();
 }
 
@@ -281,7 +320,7 @@ function buildSpecs(properties: string): MicSpec[] {
     .filter((pair) => !SKIPPED_SPEC_LABELS.has(pair.label.toLowerCase()))
     .map((pair) => ({
       label_en: pair.label,
-      label_es: SPEC_LABELS_ES[pair.label.toLowerCase()] ?? pair.label,
+      label_es: specLabelEs(pair.label),
       value: pair.value,
     }));
 }
@@ -406,9 +445,9 @@ const HEADER = [
   "--  * description_en y description_es se arman con los datos del listado.",
 ].join("\n");
 
-export function renderMadeInChinaSql(data: MicData): string {
+export function renderMadeInChinaSql(data: MicData, header: string = HEADER): string {
   const parts = [
-    HEADER,
+    header,
     renderSuppliers(data.suppliers),
     renderCertifications(data.suppliers),
     renderProducts(data.products),

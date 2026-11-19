@@ -15,6 +15,9 @@
     "scrape:laxcon": "tsx scripts/scrape-laxcon.ts",
     "db:made-in-china": "tsx scripts/generate-made-in-china-sql.ts",
     "scrape:made-in-china-images": "tsx scripts/scrape-made-in-china-images.ts",
+    "scrape:made-in-china-suppliers": "tsx scripts/scrape-made-in-china-suppliers.ts",
+    "db:made-in-china-suppliers": "tsx scripts/generate-made-in-china-suppliers-sql.ts",
+    "db:run-sql": "tsx --env-file=.env.local scripts/run-sql-file.ts",
     "db:seed": "tsx --env-file=.env.local scripts/load-seed.ts"
   },
   "dependencies": {

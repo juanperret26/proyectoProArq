@@ -129,6 +129,7 @@ describe("parseMinOrder", () => {
     expect(parseMinOrder("500 Square Meters")).toEqual({ qty: 500, unit: "m2" });
     expect(parseMinOrder("2 Pieces")).toEqual({ qty: 2, unit: "piece" });
     expect(parseMinOrder("1,000 Tons")).toEqual({ qty: 1000, unit: "ton" });
+    expect(parseMinOrder("500 pcs")).toEqual({ qty: 500, unit: "piece" });
   });
 
   it("falla con unidad desconocida o cantidad cero", () => {
@@ -274,6 +275,13 @@ describe("renderMadeInChinaSql", () => {
   it("documenta los supuestos en el encabezado", () => {
     expect(sqlText).toContain("lead_time_days");
     expect(sqlText).toContain("is_verified = false");
+  });
+
+  it("usa el encabezado indicado en lugar del predeterminado", () => {
+    const custom = renderMadeInChinaSql(buildMadeInChinaData([row()], OPTIONS), "-- encabezado propio");
+
+    expect(custom.startsWith("-- encabezado propio")).toBe(true);
+    expect(custom).not.toContain("is_verified = false");
   });
 
   it("no genera sentencias vacías sin certificaciones", () => {
