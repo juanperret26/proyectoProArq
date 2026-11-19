@@ -177,6 +177,7 @@
     "description": "Description",
     "supplier": "Supplier",
     "viewSupplier": "View supplier profile",
+    "photoOf": "Photo {position} of {total}",
     "minOrder": "Minimum order",
     "leadTime": "Lead time",
     "country": "Ships from",

@@ -6,11 +6,13 @@ import { cache, Suspense } from "react";
 
 import { ProductActions } from "@/components/account/ProductActions";
 import { Breadcrumb } from "@/components/catalog/Breadcrumb";
+import { ProductGallery } from "@/components/catalog/ProductGallery";
 import { CategoryGlyph } from "@/components/CategoryGlyph";
 import { CompareButton } from "@/components/compare/CompareButton";
 import { Link } from "@/i18n/navigation";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
 import { countryName, formatUsd, quantityWithUnit } from "@/lib/catalog/format";
+import { displayableImages } from "@/lib/catalog/images";
 import { getProductDetail } from "@/lib/catalog/queries";
 import { pickLocalized } from "@/lib/i18n/localized";
 import { alternatesFor, siteUrl, truncateDescription } from "@/lib/seo/site";
@@ -65,6 +67,7 @@ async function ProductContent({ params }: Props) {
   const match = lookupCategory(category.slug);
   const parent = match?.parent ?? null;
   const glyph = match?.top.glyph ?? "bolt";
+  const photos = displayableImages(product.image_urls);
   const { supplier } = product;
   const certs = supplier.certs.map((entry) => entry.certification);
 
@@ -99,9 +102,13 @@ async function ProductContent({ params }: Props) {
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <div className="flex flex-col gap-10">
-          <div className="flex h-64 items-center justify-center border border-rule bg-vellum">
-            <CategoryGlyph glyph={glyph} className="size-40 text-blueline" />
-          </div>
+          {photos.length > 0 ? (
+            <ProductGallery images={photos} alt={name} />
+          ) : (
+            <div className="flex h-64 items-center justify-center border border-rule bg-vellum">
+              <CategoryGlyph glyph={glyph} className="size-40 text-blueline" />
+            </div>
+          )}
 
           <section aria-labelledby="description-title">
             <h2 id="description-title" className="font-display text-[1.75rem] font-bold">

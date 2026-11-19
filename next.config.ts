@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+import { IMAGE_HOSTS } from "./src/lib/catalog/images";
+
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const securityHeaders = [
@@ -16,6 +18,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  images: {
+    remotePatterns: IMAGE_HOSTS.map((hostname) => ({ protocol: "https", hostname })),
+  },
   turbopack: {
     rules: {
       "*.css": {

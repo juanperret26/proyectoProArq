@@ -24,7 +24,7 @@ const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 const PRODUCT_DETAIL_SELECT = `
   id, name_en, name_es, description_en, description_es, specs, unit,
-  min_order_qty, lead_time_days, price_from_usd,
+  min_order_qty, lead_time_days, price_from_usd, image_urls,
   category:categories (slug, name_en, name_es),
   supplier:suppliers (
     id, slug, name, country_code, city, founded_year, business_type,

@@ -66,6 +66,7 @@ export const productDetailSchema = z.object({
   min_order_qty: z.number(),
   lead_time_days: z.number(),
   price_from_usd: z.number(),
+  image_urls: z.array(z.string()),
   category: categoryRefSchema,
   supplier: supplierSchema.extend({ certs: supplierCertificationsSchema }),
   price_tiers: z.array(

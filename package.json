@@ -12,6 +12,9 @@
     "e2e": "playwright test",
     "test:watch": "vitest",
     "db:generate-seed": "tsx scripts/generate-seed.ts",
+    "scrape:laxcon": "tsx scripts/scrape-laxcon.ts",
+    "db:made-in-china": "tsx scripts/generate-made-in-china-sql.ts",
+    "scrape:made-in-china-images": "tsx scripts/scrape-made-in-china-images.ts",
     "db:seed": "tsx --env-file=.env.local scripts/load-seed.ts"
   },
   "dependencies": {
@@ -33,12 +36,14 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/turndown": "^5.0.6",
     "@vitest/coverage-v8": "^5.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "pg": "^8.23.1",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",
+    "turndown": "^7.2.5",
     "typescript": "^5",
     "vitest": "^5.1.0"
   }

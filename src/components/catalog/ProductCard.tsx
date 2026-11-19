@@ -1,4 +1,5 @@
 import { BadgeCheck } from "lucide-react";
+import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { CategoryGlyph } from "@/components/CategoryGlyph";
@@ -6,6 +7,7 @@ import { CompareButton } from "@/components/compare/CompareButton";
 import { Link } from "@/i18n/navigation";
 import { lookupCategory } from "@/lib/catalog/category-lookup";
 import { countryName, formatUsd, quantityWithUnit } from "@/lib/catalog/format";
+import { displayableImages } from "@/lib/catalog/images";
 import type { ProductSummary } from "@/lib/catalog/schemas";
 import { pickLocalized } from "@/lib/i18n/localized";
 
@@ -21,11 +23,22 @@ export async function ProductCard({ product }: Props) {
     ? t(`units.${product.unit}`)
     : product.unit;
   const name = pickLocalized(locale, product.name_en, product.name_es);
+  const photo = displayableImages(product.image_urls)[0];
 
   return (
     <article className="group relative flex w-full flex-col border border-rule bg-paper hover:border-blueline">
-      <div className="flex h-32 items-center justify-center border-b border-rule bg-vellum">
-        <CategoryGlyph glyph={glyph} className="size-20 text-blueline" />
+      <div className="relative flex h-40 items-center justify-center overflow-hidden border-b border-rule bg-vellum">
+        {photo ? (
+          <Image
+            src={photo}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <CategoryGlyph glyph={glyph} className="size-20 text-blueline" />
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-4">
         <h3 className="text-balance font-semibold leading-snug">

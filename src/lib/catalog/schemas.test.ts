@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { productSummarySchema, supplierDetailSchema, supplierSchema } from "./schemas";
+import {
+  productDetailSchema,
+  productSummarySchema,
+  supplierDetailSchema,
+  supplierSchema,
+} from "./schemas";
 
 const summary = {
   id: "p1",
@@ -33,6 +38,48 @@ describe("productSummarySchema", () => {
   it("rejects a response with a missing field", () => {
     const incomplete = { ...summary, price_from_usd: undefined };
     expect(() => productSummarySchema.parse(incomplete)).toThrow();
+  });
+});
+
+describe("productDetailSchema", () => {
+  const detail = {
+    id: "p1",
+    name_en: "Tile",
+    name_es: null,
+    description_en: "d",
+    description_es: null,
+    specs: [],
+    unit: "m2",
+    min_order_qty: 100,
+    lead_time_days: 20,
+    price_from_usd: 5.5,
+    image_urls: ["https://image.made-in-china.com/a.webp"],
+    category: { slug: "porcelain-tiles", name_en: "Porcelain tiles", name_es: "Porcelanatos" },
+    supplier: {
+      id: "s1",
+      slug: "acme",
+      name: "Acme",
+      country_code: "CN",
+      city: "Foshan",
+      founded_year: null,
+      business_type: "manufacturer",
+      is_verified: false,
+      response_time_hours: null,
+      description_en: "d",
+      description_es: null,
+      certs: [],
+    },
+    price_tiers: [{ min_qty: 100, unit_price_usd: 5.5 }],
+  };
+
+  it("keeps the product photos, in order", () => {
+    expect(productDetailSchema.parse(detail).image_urls).toEqual([
+      "https://image.made-in-china.com/a.webp",
+    ]);
+  });
+
+  it("rejects a response without the photo list", () => {
+    expect(() => productDetailSchema.parse({ ...detail, image_urls: undefined })).toThrow();
   });
 });
 
