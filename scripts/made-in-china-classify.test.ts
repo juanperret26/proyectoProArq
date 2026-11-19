@@ -44,11 +44,58 @@ describe("classifyProduct", () => {
     expect(classify("Hex Bolt and Nut Set")).toBe("fasteners");
   });
 
-  it("descarta maquinaria y vehículos aunque nombren un material", () => {
-    expect(classify("Tower Crane QTZ80")).toBeNull();
-    expect(classify("Forklift Truck 3 Ton")).toBeNull();
-    expect(classify("Formwork Bending Machine")).toBeNull();
-    expect(classify("Rotary Drilling Rig")).toBeNull();
+  it("clasifica maquinaria aunque el nombre mencione un material", () => {
+    expect(classify("Tower Crane QTZ80")).toBe("cranes");
+    expect(classify("Forklift Truck 3 Ton")).toBe("forklifts");
+    expect(classify("Formwork Bending Machine")).toBe("building-material-machines");
+    expect(classify("Rotary Drilling Rig")).toBe("drilling-rigs");
+    expect(classify("Mobile Concrete Batching Plant")).toBe("concrete-machinery");
+    expect(classify("Hydraulic Excavator 20 Ton")).toBe("earthmoving-machinery");
+    expect(classify("Construction Elevator SC200")).toBe("lifting-equipment");
+    expect(classify("Heavy-Duty Hydraulic Lock Valve")).toBe("machinery-parts");
+  });
+
+  it("no confunde el encofrado hidráulico con repuestos hidráulicos", () => {
+    expect(classify("Hydraulic Auto-Climbing Formwork")).toBe("scaffolding");
+  });
+
+  it("clasifica vehículos y sus repuestos", () => {
+    expect(classify("Dump Truck 6x4")).toBe("trucks");
+    expect(classify("Truck Trailer 3 Axle")).toBe("trailers");
+    expect(classify("Truck Tire 315/80R22.5")).toBe("vehicle-parts");
+  });
+
+  it("clasifica edificios prefabricados y estructuras de acero", () => {
+    expect(classify("Container House Prefab")).toBe("container-houses");
+    expect(classify("Steel Structure Warehouse")).toBe("steel-structure-buildings");
+    expect(classify("Prefabricated Villa")).toBe("prefab-houses");
+  });
+
+  it("clasifica metales, madera, pinturas y químicos", () => {
+    expect(classify("PPGI Prepainted Steel Coil")).toBe("metal-coils-strips");
+    expect(classify("PPGI Roofing Sheet")).toBe("roofing-sheets");
+    expect(classify("Aluminum Sheet 5052")).toBe("non-ferrous-metals");
+    expect(classify("Brass Flat Plate")).toBe("non-ferrous-metals");
+    expect(classify("Marine Plywood 18mm")).toBe("timber-plywood");
+    expect(classify("Exterior Wall Paint")).toBe("paints-coatings");
+    expect(classify("Silicone Sealant")).toBe("adhesives-sealants");
+    expect(classify("Sodium Silicate Liquid")).toBe("industrial-chemicals");
+  });
+
+  it("clasifica planchas, cercos, cajas de zanja, bombas y cordones de acero", () => {
+    expect(classify("Stainless Steel Sheet 304 for Construction")).toBe("metal-coils-strips");
+    expect(classify("Hot Rolled Carbon Steel Plates")).toBe("metal-coils-strips");
+    expect(classify("Powder Coated Palisade Fence")).toBe("welded-mesh");
+    expect(classify("Customizable Heavy-Duty Trench Box")).toBe("scaffolding");
+    expect(classify("Self-Priming Diesel Pump 6 Inch")).toBe("machinery-parts");
+    expect(classify("High-Strength PC Strand for Prestressed Concrete")).toBe("rebar");
+    expect(classify("Mild Steel Channel Bar Black Finish")).toBe("structural-sections");
+    expect(classify("ISO2531 Ductile Iron Pipe")).toBe("steel-pipes");
+  });
+
+  it("usa el rubro del sitio para ubicar un producto de nombre genérico", () => {
+    expect(classify("Premium Item", ["Transportation", "Truck", "Dump Truck"])).toBe("trucks");
+    expect(classify("Premium Item", ["Chemicals", "Paint & Coating"])).toBe("paints-coatings");
   });
 
   it("devuelve null si nada coincide", () => {

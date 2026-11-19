@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { assertProductPageUrl } from "./made-in-china-images";
-import { hasCache, writeCache, type CachedProduct } from "./made-in-china-cache";
+import { hasCache, readCache, writeCache, type CachedProduct } from "./made-in-china-cache";
 import {
   extractHomeProductUrls,
   parseProductPage,
@@ -118,6 +118,21 @@ async function scrapeSupplier(raw: RawSupplier, max: number, cacheDir: string): 
   return `${products.length} fichas (${priced} con precio)`;
 }
 
+/** Vuelve a leer las fichas que fallaron o se descartaron por una unidad que ya se soporta. */
+async function refreshFailed(suppliers: readonly RawSupplier[], cacheDir: string): Promise<void> {
+  for (const raw of suppliers) {
+    const cache = readCache(cacheDir, raw.supplierId);
+    const targets = (cache?.products ?? []).filter(
+      (product) => product.error !== null || product.page?.priceIssue?.startsWith("unidad no soportada"),
+    );
+    if (!cache || targets.length === 0) continue;
+    const refreshed = new Map<string, CachedProduct>();
+    for (const target of targets) refreshed.set(target.url, await scrapeProduct(target.url));
+    writeCache(cacheDir, { ...cache, products: cache.products.map((p) => refreshed.get(p.url) ?? p) });
+    log(`${raw.supplierId}: ${targets.length} fichas releídas`);
+  }
+}
+
 function option(name: string, fallback: number): number {
   const arg = process.argv.find((value) => value.startsWith(`--${name}=`));
   const parsed = arg ? Number(arg.split("=")[1]) : fallback;
@@ -130,6 +145,11 @@ async function main(): Promise<void> {
   const cacheDir = resolve(cacheArg);
   const suppliers = parseSuppliersJson(readFileSync(jsonPath, "utf8")).slice(0, option("limit", Infinity));
   const max = option("max", DEFAULT_MAX_PRODUCTS);
+  if (process.argv.includes("--refresh-failed")) {
+    await refreshFailed(suppliers, cacheDir);
+    log("Listo.");
+    return;
+  }
   for (const [index, raw] of suppliers.entries()) {
     const label = `[${index + 1}/${suppliers.length}] ${raw.supplierId}`;
     if (hasCache(cacheDir, raw.supplierId)) {

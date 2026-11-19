@@ -153,6 +153,48 @@ const GLYPHS: Record<CategoryGlyphKey, GlyphRenderer> = {
       <path d="M12 48a9 22 0 0 1 18 0a9 22 0 0 0 18 0a9 22 0 0 1 18 0a9 22 0 0 0 18 0" />
     </>
   ),
+  // Engranaje en planta: dientes, eje central y ejes de simetría.
+  gear: () => (
+    <>
+      <circle cx="48" cy="48" r="22" />
+      <circle cx="48" cy="48" r="9" />
+      <path d="M44 20V10h8v10M44 76v10h8V76M20 44H10v8h10M76 44h10v8H76M28 28l-7-7 6-6 7 7M68 68l7 7-6 6-7-7M68 28l7-7-6-6-7 7M28 68l-7 7 6 6 7-7" />
+      <path
+        d={CENTERLINES}
+        strokeWidth="1"
+        strokeDasharray={CENTERLINE_DASH}
+      />
+    </>
+  ),
+  // Camión en elevación lateral: caja, cabina y dos ruedas.
+  truck: () => (
+    <>
+      <rect x="8" y="30" width="46" height="34" />
+      <path d="M54 40h16l12 14v10H54z" />
+      <path d="M62 44h8l6 8H62z" strokeWidth="1" />
+      <circle cx="26" cy="68" r="7" />
+      <circle cx="70" cy="68" r="7" />
+      <path d="M6 79h84" strokeWidth="1" />
+    </>
+  ),
+  // Pórtico de estructura de acero: columnas, cubierta a dos aguas y correas.
+  frame: () => (
+    <>
+      <path d="M14 80V40L48 18l34 22v40z" />
+      <path d="M14 40h68M48 18v22" />
+      <path d="M31 29l0 11M65 29l0 11" strokeWidth="1" />
+      <path d="M8 80h80" strokeWidth="1" />
+    </>
+  ),
+  // Pila de chapas en perspectiva.
+  stack: () => (
+    <>
+      <path d="M12 64l36-14 36 14-36 14z" />
+      <path d="M12 52l36-14 36 14" />
+      <path d="M12 40l36-14 36 14" />
+      <path d="M12 40v24M84 40v24" strokeWidth="1" />
+    </>
+  ),
 };
 
 /**

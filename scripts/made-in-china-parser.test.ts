@@ -8,6 +8,7 @@ import {
   parseCsv,
   parseMinOrder,
   parseProperties,
+  renderCategoryRealignSql,
   renderMadeInChinaSql,
   scrapedAtFromFileName,
   type BuildOptions,
@@ -130,6 +131,10 @@ describe("parseMinOrder", () => {
     expect(parseMinOrder("2 Pieces")).toEqual({ qty: 2, unit: "piece" });
     expect(parseMinOrder("1,000 Tons")).toEqual({ qty: 1000, unit: "ton" });
     expect(parseMinOrder("500 pcs")).toEqual({ qty: 500, unit: "piece" });
+    expect(parseMinOrder("1,000 kg")).toEqual({ qty: 1000, unit: "kg" });
+    expect(parseMinOrder("45 cbm")).toEqual({ qty: 45, unit: "m3" });
+    expect(parseMinOrder("1 Unit")).toEqual({ qty: 1, unit: "unit" });
+    expect(parseMinOrder("20 Meters")).toEqual({ qty: 20, unit: "m" });
   });
 
   it("falla con unidad desconocida o cantidad cero", () => {
@@ -247,6 +252,24 @@ describe("buildMadeInChinaData", () => {
     expect(() =>
       buildMadeInChinaData([row(), row({ company_id: "co3", product_id: "p3" })], options),
     ).toThrow(/slug/);
+  });
+});
+
+describe("renderCategoryRealignSql", () => {
+  const { products } = buildMadeInChinaData([row()], OPTIONS);
+
+  it("mueve de rubro solo los productos cuyo rubro cambió", () => {
+    const sqlText = renderCategoryRealignSql(products);
+
+    expect(sqlText).toContain("update public.products p");
+    expect(sqlText).toContain("set category_id = c.id");
+    expect(sqlText).toContain("('p1', 'porcelain-tiles')");
+    expect(sqlText).toContain("p.category_id <> c.id");
+    expect(sqlText).not.toMatch(/\bdelete\b/i);
+  });
+
+  it("no genera nada sin productos", () => {
+    expect(renderCategoryRealignSql([])).toBe("");
   });
 });
 

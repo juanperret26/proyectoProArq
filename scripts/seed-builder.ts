@@ -229,7 +229,7 @@ function renderCountries(): string {
   return `insert into public.countries (code, name_en, name_es) values\n  ${values(rows)}\non conflict (code) do nothing;`;
 }
 
-function renderCategories(): string {
+export function renderCategories(): string {
   const parents = CATEGORY_TAXONOMY.map(
     (c, i) => `(${sql(c.slug)}, ${sql(c.nameEn)}, ${sql(c.nameEs)}, ${i})`,
   );

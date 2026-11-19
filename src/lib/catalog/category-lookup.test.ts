@@ -28,6 +28,6 @@ describe("allCategorySlugs", () => {
     expect(slugs).toContain("cement-concrete");
     expect(slugs).toContain("portland-cement");
     expect(new Set(slugs).size).toBe(slugs.length);
-    expect(slugs).toHaveLength(40);
+    expect(slugs).toHaveLength(64);
   });
 });

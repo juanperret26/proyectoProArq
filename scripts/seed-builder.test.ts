@@ -18,9 +18,14 @@ describe("buildSeedData", () => {
     expect(ids.size).toBe(data.products.length);
   });
 
-  it("covers every taxonomy subcategory", () => {
+  it("covers every subcategory of the original eight demo categories", () => {
+    // Los rubros siguientes (maquinaria, camiones, prefabricados, metales) se
+    // llenan con datos reales de Made-in-China, no con el catálogo de ejemplo.
+    const DEMO_TOP_LEVEL_COUNT = 8;
     const covered = new Set(data.products.map((p) => p.categorySlug));
-    const expected = CATEGORY_TAXONOMY.flatMap((c) => c.children.map((s) => s.slug));
+    const expected = CATEGORY_TAXONOMY.slice(0, DEMO_TOP_LEVEL_COUNT).flatMap((c) =>
+      c.children.map((s) => s.slug),
+    );
     expect(expected.filter((slug) => !covered.has(slug))).toEqual([]);
   });
 

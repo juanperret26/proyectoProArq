@@ -96,7 +96,11 @@
       "sheet": "paño",
       "roll": "rollo",
       "box": "caja",
-      "set": "juego"
+      "set": "juego",
+      "kg": "kg",
+      "m3": "m³",
+      "m": "m",
+      "unit": "unidad"
     },
     "quantityUnits": {
       "m2": "{count, number} m²",
@@ -106,7 +110,11 @@
       "sheet": "{count, plural, one {# paño} other {# paños}}",
       "roll": "{count, plural, one {# rollo} other {# rollos}}",
       "box": "{count, plural, one {# caja} other {# cajas}}",
-      "set": "{count, plural, one {# juego} other {# juegos}}"
+      "set": "{count, plural, one {# juego} other {# juegos}}",
+      "kg": "{count, number} kg",
+      "m3": "{count, number} m³",
+      "m": "{count, number} m",
+      "unit": "{count, plural, one {# unidad} other {# unidades}}"
     },
     "featuredTitle": "Productos de proveedores verificados",
     "featuredAll": "Ver todos los productos"

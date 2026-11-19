@@ -96,7 +96,11 @@
       "sheet": "sheet",
       "roll": "roll",
       "box": "box",
-      "set": "set"
+      "set": "set",
+      "kg": "kg",
+      "m3": "m³",
+      "m": "m",
+      "unit": "unit"
     },
     "quantityUnits": {
       "m2": "{count, number} m²",
@@ -106,7 +110,11 @@
       "sheet": "{count, plural, one {# sheet} other {# sheets}}",
       "roll": "{count, plural, one {# roll} other {# rolls}}",
       "box": "{count, plural, one {# box} other {# boxes}}",
-      "set": "{count, plural, one {# set} other {# sets}}"
+      "set": "{count, plural, one {# set} other {# sets}}",
+      "kg": "{count, number} kg",
+      "m3": "{count, number} m³",
+      "m": "{count, number} m",
+      "unit": "{count, plural, one {# unit} other {# units}}"
     },
     "featuredTitle": "Products from verified suppliers",
     "featuredAll": "See all products"

@@ -11,7 +11,11 @@ export type CategoryGlyphKey =
   | "door"
   | "light"
   | "bolt"
-  | "insulation";
+  | "insulation"
+  | "gear"
+  | "truck"
+  | "frame"
+  | "stack";
 
 export interface TaxonomyEntry {
   slug: string;
@@ -239,6 +243,122 @@ export const CATEGORY_TAXONOMY: readonly TaxonomyCategory[] = [
         slug: "waterproofing-membranes",
         nameEn: "Waterproofing membranes",
         nameEs: "Membranas impermeabilizantes",
+      },
+    ],
+  },
+  {
+    slug: "construction-machinery",
+    nameEn: "Construction machinery",
+    nameEs: "Maquinaria de construcción",
+    glyph: "gear",
+    children: [
+      { slug: "cranes", nameEn: "Cranes", nameEs: "Grúas" },
+      {
+        slug: "earthmoving-machinery",
+        nameEn: "Earthmoving & mining machinery",
+        nameEs: "Movimiento de tierras y minería",
+      },
+      {
+        slug: "concrete-machinery",
+        nameEn: "Concrete machinery",
+        nameEs: "Maquinaria para hormigón",
+      },
+      {
+        slug: "drilling-rigs",
+        nameEn: "Drilling rigs",
+        nameEs: "Perforadoras",
+      },
+      {
+        slug: "lifting-equipment",
+        nameEn: "Lifts & elevators",
+        nameEs: "Elevadores y montacargas",
+      },
+      { slug: "forklifts", nameEn: "Forklifts", nameEs: "Autoelevadores" },
+      {
+        slug: "building-material-machines",
+        nameEn: "Building material machines",
+        nameEs: "Máquinas para materiales de construcción",
+      },
+      {
+        slug: "machinery-parts",
+        nameEn: "Machinery parts & hydraulics",
+        nameEs: "Repuestos de maquinaria e hidráulica",
+      },
+    ],
+  },
+  {
+    slug: "trucks-trailers",
+    nameEn: "Trucks & trailers",
+    nameEs: "Camiones y remolques",
+    glyph: "truck",
+    children: [
+      { slug: "trucks", nameEn: "Trucks", nameEs: "Camiones" },
+      { slug: "trailers", nameEn: "Trailers", nameEs: "Remolques" },
+      {
+        slug: "vehicle-parts",
+        nameEn: "Tires, rail & vehicle parts",
+        nameEs: "Neumáticos, ferroviario y repuestos",
+      },
+    ],
+  },
+  {
+    slug: "prefab-buildings",
+    nameEn: "Prefabricated buildings",
+    nameEs: "Edificios prefabricados",
+    glyph: "frame",
+    children: [
+      {
+        slug: "prefab-houses",
+        nameEn: "Prefabricated buildings",
+        nameEs: "Edificios prefabricados",
+      },
+      {
+        slug: "container-houses",
+        nameEn: "Container houses",
+        nameEs: "Casas contenedor",
+      },
+      {
+        slug: "steel-structure-buildings",
+        nameEn: "Steel structure buildings",
+        nameEs: "Edificios de estructura de acero",
+      },
+    ],
+  },
+  {
+    slug: "metals-wood-chemicals",
+    nameEn: "Metals, wood & chemicals",
+    nameEs: "Metales, madera y químicos",
+    glyph: "stack",
+    children: [
+      {
+        slug: "metal-coils-strips",
+        nameEn: "Metal coils, sheets & plates",
+        nameEs: "Bobinas, chapas y planchas metálicas",
+      },
+      {
+        slug: "non-ferrous-metals",
+        nameEn: "Aluminum, copper & brass",
+        nameEs: "Aluminio, cobre y latón",
+      },
+      {
+        slug: "timber-plywood",
+        nameEn: "Timber & plywood",
+        nameEs: "Madera y contrachapado",
+      },
+      {
+        slug: "paints-coatings",
+        nameEn: "Paints & coatings",
+        nameEs: "Pinturas y recubrimientos",
+      },
+      {
+        slug: "adhesives-sealants",
+        nameEn: "Adhesives & sealants",
+        nameEs: "Adhesivos y selladores",
+      },
+      {
+        slug: "industrial-chemicals",
+        nameEn: "Industrial chemicals",
+        nameEs: "Químicos industriales",
       },
     ],
   },

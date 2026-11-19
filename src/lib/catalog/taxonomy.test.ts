@@ -4,8 +4,21 @@ import { CATEGORY_TAXONOMY, findTaxonomyCategory } from "./taxonomy";
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 describe("CATEGORY_TAXONOMY", () => {
-  it("define ocho rubros de construcción de primer nivel", () => {
-    expect(CATEGORY_TAXONOMY).toHaveLength(8);
+  it("define doce rubros de primer nivel", () => {
+    expect(CATEGORY_TAXONOMY).toHaveLength(12);
+  });
+
+  it("incluye los rubros de maquinaria, vehículos, prefabricados y metales", () => {
+    const slugs = CATEGORY_TAXONOMY.map((category) => category.slug);
+
+    expect(slugs).toEqual(
+      expect.arrayContaining([
+        "construction-machinery",
+        "trucks-trailers",
+        "prefab-buildings",
+        "metals-wood-chemicals",
+      ]),
+    );
   });
 
   it("usa slugs únicos y en kebab-case en rubros y subrubros", () => {

@@ -121,7 +121,7 @@ describe("parseProductPage", () => {
   });
 
   it("marca la unidad como desconocida en vez de inventarla", () => {
-    const product = parsed([PRODUCT_LD, tier("5.00", "10-99", "Meters")]);
+    const product = parsed([PRODUCT_LD, tier("5.00", "10-99", "Containers")]);
 
     expect(product.price).toBeNull();
     expect(product.priceIssue).toMatch(/unidad/i);

@@ -55,6 +55,18 @@ const UNIT_CODES: Readonly<Record<string, string>> = {
   boxes: "box",
   set: "set",
   sets: "set",
+  kg: "kg",
+  kgs: "kg",
+  kilogram: "kg",
+  kilograms: "kg",
+  cbm: "m3",
+  "cubic meter": "m3",
+  "cubic meters": "m3",
+  m3: "m3",
+  meter: "m",
+  meters: "m",
+  unit: "unit",
+  units: "unit",
 };
 
 const UNIT_LABELS: Readonly<Record<string, { en: string; es: string }>> = {
@@ -66,6 +78,10 @@ const UNIT_LABELS: Readonly<Record<string, { en: string; es: string }>> = {
   roll: { en: "rolls", es: "rollos" },
   box: { en: "boxes", es: "cajas" },
   set: { en: "sets", es: "juegos" },
+  kg: { en: "kg", es: "kg" },
+  m3: { en: "m³", es: "m³" },
+  m: { en: "m", es: "m" },
+  unit: { en: "units", es: "unidades" },
 };
 
 /** Especificaciones que el sitio repite en todos los productos y no informan. */
@@ -454,6 +470,16 @@ export function renderMadeInChinaSql(data: MicData, header: string = HEADER): st
     renderPriceTiers(data.products),
   ].filter((part) => part !== "");
   return parts.join("\n\n") + "\n";
+}
+
+/**
+ * Mueve al rubro actual a los productos ya cargados (la carga inserta con
+ * `on conflict do nothing` y no actualiza el rubro de los existentes).
+ */
+export function renderCategoryRealignSql(products: readonly MicProduct[]): string {
+  if (products.length === 0) return "";
+  const rows = products.map((p) => `(${sql(p.externalId)}, ${sql(p.categorySlug)})`);
+  return `update public.products p\nset category_id = c.id\nfrom (values\n  ${values(rows)}\n) as v (external_id, category_slug)\njoin public.categories c on c.slug = v.category_slug\nwhere p.source_site = ${sql(SOURCE_SITE)} and p.source_external_id = v.external_id and p.category_id <> c.id;\n`;
 }
 
 function renderSuppliers(suppliers: readonly MicSupplier[]): string {

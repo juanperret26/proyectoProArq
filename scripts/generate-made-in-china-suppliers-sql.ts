@@ -9,7 +9,11 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { readCache } from "./made-in-china-cache";
-import { renderMadeInChinaSql, type MicSupplier } from "./made-in-china-parser";
+import {
+  renderCategoryRealignSql,
+  renderMadeInChinaSql,
+  type MicSupplier,
+} from "./made-in-china-parser";
 import { buildProducts, type Omission, type SupplierEntry } from "./made-in-china-products";
 import { LOCATION_OVERRIDES } from "./made-in-china-suppliers-overrides";
 import {
@@ -100,7 +104,8 @@ function main(): void {
   const { products, omitted } = buildProducts(entries, nameEs);
   const suppliers: MicSupplier[] = entries.map((entry) => entry.supplier);
   const outputPath = outputArg ? resolve(outputArg) : DEFAULT_OUTPUT;
-  writeFileSync(outputPath, renderMadeInChinaSql({ suppliers, products }, HEADER), "utf8");
+  const sqlText = `${renderMadeInChinaSql({ suppliers, products }, HEADER)}\n${renderCategoryRealignSql(products)}`;
+  writeFileSync(outputPath, sqlText, "utf8");
   process.stderr.write(`${report(skipped, types, entries, products, omitted)}\n\nSQL: ${outputPath}\n`);
 }
 

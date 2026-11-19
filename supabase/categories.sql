@@ -1,0 +1,76 @@
+-- Generado por scripts/generate-categories-sql.ts. No editar a mano.
+-- Agrega los rubros de la taxonomia que faltan; los existentes no se modifican.
+
+insert into public.categories (slug, name_en, name_es, position) values
+  ('cement-concrete', 'Cement & concrete', 'Cemento y hormigón', 0),
+  ('steel-structures', 'Steel & structures', 'Acero y estructuras', 1),
+  ('tiles-ceramics', 'Tiles & ceramics', 'Cerámicos y revestimientos', 2),
+  ('sanitary-plumbing', 'Sanitary ware & faucets', 'Sanitarios y grifería', 3),
+  ('doors-windows', 'Doors & windows', 'Aberturas', 4),
+  ('electrical-lighting', 'Electrical & lighting', 'Electricidad e iluminación', 5),
+  ('tools-hardware', 'Tools & hardware', 'Herramientas y ferretería', 6),
+  ('insulation-roofing', 'Insulation & roofing', 'Aislantes y techos', 7),
+  ('construction-machinery', 'Construction machinery', 'Maquinaria de construcción', 8),
+  ('trucks-trailers', 'Trucks & trailers', 'Camiones y remolques', 9),
+  ('prefab-buildings', 'Prefabricated buildings', 'Edificios prefabricados', 10),
+  ('metals-wood-chemicals', 'Metals, wood & chemicals', 'Metales, madera y químicos', 11)
+on conflict (slug) do nothing;
+
+insert into public.categories (slug, name_en, name_es, position, parent_id)
+select v.slug, v.name_en, v.name_es, v.position, p.id
+from (values
+  ('portland-cement', 'Portland cement', 'Cemento portland', 0, 'cement-concrete'),
+  ('concrete-admixtures', 'Concrete admixtures', 'Aditivos para hormigón', 1, 'cement-concrete'),
+  ('concrete-blocks', 'Concrete blocks & pavers', 'Bloques y adoquines de hormigón', 2, 'cement-concrete'),
+  ('mortars-adhesives', 'Mortars & tile adhesives', 'Morteros y adhesivos', 3, 'cement-concrete'),
+  ('rebar', 'Reinforcing bar', 'Barras de acero para hormigón', 0, 'steel-structures'),
+  ('structural-sections', 'Structural sections', 'Perfiles estructurales', 1, 'steel-structures'),
+  ('welded-mesh', 'Welded wire mesh', 'Mallas electrosoldadas', 2, 'steel-structures'),
+  ('steel-pipes', 'Steel pipes & tubes', 'Caños y tubos de acero', 3, 'steel-structures'),
+  ('porcelain-tiles', 'Porcelain tiles', 'Porcelanatos', 0, 'tiles-ceramics'),
+  ('ceramic-wall-tiles', 'Ceramic wall tiles', 'Cerámicos de pared', 1, 'tiles-ceramics'),
+  ('mosaics', 'Mosaics', 'Mosaicos', 2, 'tiles-ceramics'),
+  ('stone-slabs', 'Natural stone slabs', 'Placas de piedra natural', 3, 'tiles-ceramics'),
+  ('toilets', 'Toilets', 'Inodoros', 0, 'sanitary-plumbing'),
+  ('basins', 'Basins & sinks', 'Lavatorios y bachas', 1, 'sanitary-plumbing'),
+  ('faucets', 'Faucets & mixers', 'Griferías y monocomandos', 2, 'sanitary-plumbing'),
+  ('pipes-fittings', 'Pipes & fittings', 'Caños y accesorios', 3, 'sanitary-plumbing'),
+  ('aluminum-windows', 'Aluminum windows', 'Ventanas de aluminio', 0, 'doors-windows'),
+  ('upvc-windows', 'uPVC windows', 'Ventanas de PVC', 1, 'doors-windows'),
+  ('interior-doors', 'Interior doors', 'Puertas de interior', 2, 'doors-windows'),
+  ('door-hardware', 'Door hardware', 'Herrajes para puertas', 3, 'doors-windows'),
+  ('cables-wires', 'Cables & wires', 'Cables y conductores', 0, 'electrical-lighting'),
+  ('switches-sockets', 'Switches & sockets', 'Llaves y tomacorrientes', 1, 'electrical-lighting'),
+  ('led-lighting', 'LED lighting', 'Iluminación LED', 2, 'electrical-lighting'),
+  ('circuit-breakers', 'Circuit breakers', 'Interruptores termomagnéticos', 3, 'electrical-lighting'),
+  ('power-tools', 'Power tools', 'Herramientas eléctricas', 0, 'tools-hardware'),
+  ('hand-tools', 'Hand tools', 'Herramientas manuales', 1, 'tools-hardware'),
+  ('fasteners', 'Fasteners & anchors', 'Fijaciones y anclajes', 2, 'tools-hardware'),
+  ('scaffolding', 'Scaffolding & formwork', 'Andamios y encofrados', 3, 'tools-hardware'),
+  ('mineral-wool', 'Mineral wool', 'Lana mineral', 0, 'insulation-roofing'),
+  ('foam-boards', 'XPS & EPS boards', 'Placas de XPS y EPS', 1, 'insulation-roofing'),
+  ('roofing-sheets', 'Roofing sheets', 'Chapas para techos', 2, 'insulation-roofing'),
+  ('waterproofing-membranes', 'Waterproofing membranes', 'Membranas impermeabilizantes', 3, 'insulation-roofing'),
+  ('cranes', 'Cranes', 'Grúas', 0, 'construction-machinery'),
+  ('earthmoving-machinery', 'Earthmoving & mining machinery', 'Movimiento de tierras y minería', 1, 'construction-machinery'),
+  ('concrete-machinery', 'Concrete machinery', 'Maquinaria para hormigón', 2, 'construction-machinery'),
+  ('drilling-rigs', 'Drilling rigs', 'Perforadoras', 3, 'construction-machinery'),
+  ('lifting-equipment', 'Lifts & elevators', 'Elevadores y montacargas', 4, 'construction-machinery'),
+  ('forklifts', 'Forklifts', 'Autoelevadores', 5, 'construction-machinery'),
+  ('building-material-machines', 'Building material machines', 'Máquinas para materiales de construcción', 6, 'construction-machinery'),
+  ('machinery-parts', 'Machinery parts & hydraulics', 'Repuestos de maquinaria e hidráulica', 7, 'construction-machinery'),
+  ('trucks', 'Trucks', 'Camiones', 0, 'trucks-trailers'),
+  ('trailers', 'Trailers', 'Remolques', 1, 'trucks-trailers'),
+  ('vehicle-parts', 'Tires, rail & vehicle parts', 'Neumáticos, ferroviario y repuestos', 2, 'trucks-trailers'),
+  ('prefab-houses', 'Prefabricated buildings', 'Edificios prefabricados', 0, 'prefab-buildings'),
+  ('container-houses', 'Container houses', 'Casas contenedor', 1, 'prefab-buildings'),
+  ('steel-structure-buildings', 'Steel structure buildings', 'Edificios de estructura de acero', 2, 'prefab-buildings'),
+  ('metal-coils-strips', 'Metal coils, sheets & plates', 'Bobinas, chapas y planchas metálicas', 0, 'metals-wood-chemicals'),
+  ('non-ferrous-metals', 'Aluminum, copper & brass', 'Aluminio, cobre y latón', 1, 'metals-wood-chemicals'),
+  ('timber-plywood', 'Timber & plywood', 'Madera y contrachapado', 2, 'metals-wood-chemicals'),
+  ('paints-coatings', 'Paints & coatings', 'Pinturas y recubrimientos', 3, 'metals-wood-chemicals'),
+  ('adhesives-sealants', 'Adhesives & sealants', 'Adhesivos y selladores', 4, 'metals-wood-chemicals'),
+  ('industrial-chemicals', 'Industrial chemicals', 'Químicos industriales', 5, 'metals-wood-chemicals')
+) as v (slug, name_en, name_es, position, parent_slug)
+join public.categories p on p.slug = v.parent_slug
+on conflict (slug) do nothing;

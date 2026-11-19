@@ -100,7 +100,7 @@ describe("buildProducts", () => {
     const { products, omitted } = build([
       { error: "HTTP 404" },
       page({ externalId: "BBBBBBBBBBBB", price: null, priceIssue: "sin precio numérico en la ficha" }),
-      page({ externalId: "CCCCCCCCCCCC", name: "Tower Crane QTZ80" }),
+      page({ externalId: "CCCCCCCCCCCC", name: "Steam Coal for Power Plant" }),
       page({ externalId: "DDDDDDDDDDDD" }),
       page({ externalId: "DDDDDDDDDDDD" }),
     ]);
