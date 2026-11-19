@@ -196,7 +196,9 @@
     "certifications": "Certifications",
     "noCertifications": "No certifications listed",
     "verified": "Verified supplier",
-    "productsTitle": "Products from this supplier"
+    "productsTitle": "Products from this supplier",
+    "noProducts": "No products listed yet.",
+    "sourceNote": "Public company profile compiled from <link>Wikidata</link>, an open database. This company is not a ProArq member and has not been verified. We have no prices or products from it."
   },
   "footer": {
     "about": "ProArq helps builders and architects compare construction suppliers across countries before they buy.",

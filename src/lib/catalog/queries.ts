@@ -37,6 +37,7 @@ const PRODUCT_DETAIL_SELECT = `
 const SUPPLIER_DETAIL_SELECT = `
   id, slug, name, country_code, city, founded_year, business_type,
   is_verified, response_time_hours, description_en, description_es,
+  source_site, source_url,
   certs:supplier_certifications (certification:certifications (code, name))
 `;
 

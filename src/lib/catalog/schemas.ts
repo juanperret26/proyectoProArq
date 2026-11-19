@@ -75,6 +75,8 @@ export const productDetailSchema = z.object({
 
 export const supplierDetailSchema = supplierSchema.extend({
   certs: supplierCertificationsSchema,
+  source_site: z.string(),
+  source_url: z.string().nullable(),
 });
 
 /** Fila de `products` con su rubro y proveedor embebidos (ficha del proveedor). */

@@ -8,6 +8,7 @@ import { Breadcrumb } from "@/components/catalog/Breadcrumb";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { countryName } from "@/lib/catalog/format";
 import { getSupplierDetail, getSupplierProducts } from "@/lib/catalog/queries";
+import { wikidataProfileUrl } from "@/lib/catalog/source";
 import { pickLocalized } from "@/lib/i18n/localized";
 import { alternatesFor, siteUrl, truncateDescription } from "@/lib/seo/site";
 
@@ -56,6 +57,7 @@ async function SupplierContent({ params }: Props) {
     getTranslations("header"),
   ]);
   const certs = supplier.certs.map((entry) => entry.certification);
+  const wikidataUrl = wikidataProfileUrl(supplier.source_site, supplier.source_url);
 
   return (
     <>
@@ -73,6 +75,22 @@ async function SupplierContent({ params }: Props) {
         <p className="mt-4 leading-relaxed text-ink-soft">
           {pickLocalized(locale, supplier.description_en, supplier.description_es)}
         </p>
+        {wikidataUrl ? (
+          <p className="mt-4 border-l-2 border-blueline bg-vellum px-4 py-3 text-[0.9375rem] leading-relaxed text-ink-soft">
+            {t.rich("sourceNote", {
+              link: (chunks) => (
+                <a
+                  href={wikidataUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-text"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
+          </p>
+        ) : null}
       </header>
 
       <dl className="mt-8 grid gap-x-8 gap-y-4 border-y border-rule py-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -114,13 +132,17 @@ async function SupplierContent({ params }: Props) {
         <h2 id="supplier-products" className="font-display text-[1.75rem] font-bold">
           {t("productsTitle")}
         </h2>
-        <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => (
-            <li key={product.id} className="flex">
-              <ProductCard product={product} />
-            </li>
-          ))}
-        </ul>
+        {products.length === 0 ? (
+          <p className="mt-4 text-ink-soft">{t("noProducts")}</p>
+        ) : (
+          <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {products.map((product) => (
+              <li key={product.id} className="flex">
+                <ProductCard product={product} />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </>
   );

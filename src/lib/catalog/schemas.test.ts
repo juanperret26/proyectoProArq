@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { productSummarySchema, supplierSchema } from "./schemas";
+import { productSummarySchema, supplierDetailSchema, supplierSchema } from "./schemas";
 
 const summary = {
   id: "p1",
@@ -53,5 +53,43 @@ describe("supplierSchema", () => {
         description_es: null,
       }),
     ).toThrow();
+  });
+});
+
+describe("supplierDetailSchema", () => {
+  const detail = {
+    id: "s1",
+    slug: "acme",
+    name: "Acme",
+    country_code: "CN",
+    city: "Foshan",
+    founded_year: null,
+    business_type: "manufacturer",
+    is_verified: false,
+    response_time_hours: null,
+    description_en: "d",
+    description_es: null,
+    certs: [],
+  };
+
+  it("keeps where the supplier profile came from", () => {
+    const parsed = supplierDetailSchema.parse({
+      ...detail,
+      source_site: "wikidata",
+      source_url: "https://www.wikidata.org/wiki/Q1",
+    });
+    expect(parsed.source_site).toBe("wikidata");
+    expect(parsed.source_url).toBe("https://www.wikidata.org/wiki/Q1");
+  });
+
+  it("accepts a supplier without a source url", () => {
+    expect(
+      supplierDetailSchema.parse({ ...detail, source_site: "seed", source_url: null })
+        .source_url,
+    ).toBeNull();
+  });
+
+  it("rejects a supplier row without its source", () => {
+    expect(() => supplierDetailSchema.parse(detail)).toThrow();
   });
 });
