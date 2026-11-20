@@ -5,25 +5,47 @@ import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
 import { pickLocalized } from "@/lib/i18n/localized";
 import { AuthNav } from "./AuthNav";
+import { CategoryMenu } from "./CategoryMenu";
 import { LanguageToggle } from "./LanguageToggle";
 import { Logo } from "./Logo";
 import { SearchForm } from "./SearchForm";
 
-const RAIL_LINK =
-  "block whitespace-nowrap py-3 text-[0.9375rem] leading-5 underline-offset-4 hover:text-blueline hover:underline lg:text-sm lg:leading-5";
+const MENU_TOOL_LINK =
+  "block py-2.5 text-[0.9375rem] leading-5 underline-offset-4 hover:text-blueline hover:underline";
 
 /**
- * Encabezado del sitio. Arriba: marca, buscador, herramientas, ingreso e
- * idioma. Abajo: la barra de rubros. En pantallas chicas las herramientas
- * (asistente y comparador) pasan a la barra, que se desliza de lado.
+ * Encabezado del sitio: menú de tres líneas con todos los rubros, marca,
+ * buscador, herramientas, ingreso e idioma. En pantallas chicas las
+ * herramientas (asistente y comparador) pasan al menú.
  */
 export async function Header() {
   const t = await getTranslations("header");
   const locale = await getLocale();
+  const categoryItems = CATEGORY_TAXONOMY.map((category) => ({
+    slug: category.slug,
+    label: pickLocalized(locale, category.nameEn, category.nameEs),
+  }));
 
   return (
-    <header className="border-b border-rule bg-paper">
+    <header className="relative border-b border-rule bg-paper">
       <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-x-6">
+        <CategoryMenu
+          items={categoryItems}
+          openLabel={t("openMenu")}
+          closeLabel={t("closeMenu")}
+          navLabel={t("railNav")}
+        >
+          <li>
+            <Link href="/assistant" className={MENU_TOOL_LINK}>
+              {t("assistant")}
+            </Link>
+          </li>
+          <li>
+            <CompareNavLink className={MENU_TOOL_LINK}>
+              {t("compare")}
+            </CompareNavLink>
+          </li>
+        </CategoryMenu>
         <Link href="/" aria-label={t("home")} className="shrink-0">
           <Logo />
         </Link>
@@ -43,35 +65,6 @@ export async function Header() {
           </Suspense>
         </div>
       </div>
-
-      <nav aria-label={t("railNav")} className="border-t border-rule">
-        <ul className="mx-auto flex max-w-[1240px] gap-x-5 overflow-x-auto px-4 [scrollbar-width:none] sm:px-6 lg:flex-wrap lg:overflow-visible [&::-webkit-scrollbar]:hidden">
-          <li className="lg:hidden">
-            <Link href="/assistant" className={`${RAIL_LINK} font-semibold`}>
-              {t("assistant")}
-            </Link>
-          </li>
-          <li className="lg:hidden">
-            <CompareNavLink className={`${RAIL_LINK} font-semibold`}>
-              {t("compare")}
-            </CompareNavLink>
-          </li>
-          <li
-            aria-hidden="true"
-            className="my-2.5 w-px shrink-0 bg-rule lg:hidden"
-          />
-          {CATEGORY_TAXONOMY.map((category) => (
-            <li key={category.slug}>
-              <Link
-                href={`/categories/${category.slug}`}
-                className={`${RAIL_LINK} text-ink-soft`}
-              >
-                {pickLocalized(locale, category.nameEn, category.nameEs)}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </header>
   );
 }

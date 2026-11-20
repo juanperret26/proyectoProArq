@@ -9,6 +9,8 @@
   "header": {
     "home": "ProArq home",
     "railNav": "Tools and materials",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "assistant": "Assistant",
     "compare": "Compare",
     "signIn": "Sign in",
