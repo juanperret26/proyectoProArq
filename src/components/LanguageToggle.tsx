@@ -36,7 +36,7 @@ export function LanguageToggle() {
       className="btn btn-outline"
     >
       <Languages className="size-4" aria-hidden="true" />
-      {t("target")}
+      <span className="max-sm:sr-only">{t("target")}</span>
     </button>
   );
 }

@@ -28,7 +28,7 @@ export async function Header() {
 
   return (
     <header className="relative border-b border-rule bg-paper">
-      <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-x-6">
+      <div className="mx-auto flex max-w-[1240px] flex-wrap items-center gap-x-2 gap-y-3 sm:gap-x-5 px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-x-6">
         <CategoryMenu
           items={categoryItems}
           openLabel={t("openMenu")}
@@ -52,7 +52,7 @@ export async function Header() {
         <div className="order-last w-full lg:order-none lg:w-auto lg:flex-1">
           <SearchForm />
         </div>
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
           <Link href="/assistant" className="btn btn-quiet max-lg:hidden">
             {t("assistant")}
           </Link>

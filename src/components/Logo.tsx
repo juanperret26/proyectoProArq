@@ -9,7 +9,7 @@ export function Logo({ className = "" }: LogoProps) {
   const clipId = useId();
 
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+    <span className={`inline-flex items-center gap-2 sm:gap-2.5 ${className}`}>
       <svg
         width="28"
         height="28"
@@ -18,7 +18,7 @@ export function Logo({ className = "" }: LogoProps) {
         stroke="currentColor"
         strokeWidth="2"
         aria-hidden="true"
-        className="text-blueline"
+        className="size-6 text-blueline sm:size-7"
       >
         <defs>
           <clipPath id={clipId}>
@@ -31,7 +31,7 @@ export function Logo({ className = "" }: LogoProps) {
         />
         <rect x="2" y="2" width="24" height="24" />
       </svg>
-      <span className="font-display text-[1.875rem] font-extrabold leading-none text-ink">
+      <span className="font-display text-[1.5rem] font-extrabold sm:text-[1.875rem] leading-none text-ink">
         ProArq
       </span>
     </span>
