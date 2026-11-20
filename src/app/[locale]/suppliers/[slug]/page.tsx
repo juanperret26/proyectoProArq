@@ -8,7 +8,7 @@ import { Breadcrumb } from "@/components/catalog/Breadcrumb";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { countryName } from "@/lib/catalog/format";
 import { getSupplierDetail, getSupplierProducts } from "@/lib/catalog/queries";
-import { wikidataProfileUrl } from "@/lib/catalog/source";
+import { madeInChinaStoreUrl, wikidataProfileUrl } from "@/lib/catalog/source";
 import { pickLocalized } from "@/lib/i18n/localized";
 import { alternatesFor, siteUrl, truncateDescription } from "@/lib/seo/site";
 
@@ -58,6 +58,7 @@ async function SupplierContent({ params }: Props) {
   ]);
   const certs = supplier.certs.map((entry) => entry.certification);
   const wikidataUrl = wikidataProfileUrl(supplier.source_site, supplier.source_url);
+  const storeUrl = madeInChinaStoreUrl(supplier.source_site, supplier.source_url);
 
   return (
     <>
@@ -75,6 +76,18 @@ async function SupplierContent({ params }: Props) {
         <p className="mt-4 leading-relaxed text-ink-soft">
           {pickLocalized(locale, supplier.description_en, supplier.description_es)}
         </p>
+        {storeUrl ? (
+          <p className="mt-4">
+            <a
+              href={storeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-text font-semibold"
+            >
+              {t("officialPage")}
+            </a>
+          </p>
+        ) : null}
         {wikidataUrl ? (
           <p className="mt-4 border-l-2 border-blueline bg-vellum px-4 py-3 text-[0.9375rem] leading-relaxed text-ink-soft">
             {t.rich("sourceNote", {

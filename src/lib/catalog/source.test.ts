@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { wikidataProfileUrl } from "./source";
+import { madeInChinaStoreUrl, wikidataProfileUrl } from "./source";
 
 describe("wikidataProfileUrl", () => {
   it("returns the item url for a profile compiled from Wikidata", () => {
@@ -28,5 +28,21 @@ describe("wikidataProfileUrl", () => {
     ).toBeNull();
     expect(wikidataProfileUrl("wikidata", "javascript:alert(1)")).toBeNull();
     expect(wikidataProfileUrl("wikidata", "https://www.wikidata.org/wiki/Q12abc")).toBeNull();
+  });
+});
+
+describe("madeInChinaStoreUrl", () => {
+  const url = "https://acme.en.made-in-china.com/";
+  it("devuelve la tienda de un proveedor de Made-in-China", () => {
+    expect(madeInChinaStoreUrl("made-in-china", url)).toBe(url);
+  });
+  it("devuelve null con otro origen o sin dirección", () => {
+    expect(madeInChinaStoreUrl("seed", url)).toBeNull();
+    expect(madeInChinaStoreUrl("made-in-china", null)).toBeNull();
+  });
+  it("rechaza http, otros hosts y esquemas peligrosos", () => {
+    expect(madeInChinaStoreUrl("made-in-china", "http://a.en.made-in-china.com/")).toBeNull();
+    expect(madeInChinaStoreUrl("made-in-china", "https://a.en.made-in-china.com.evil.example/")).toBeNull();
+    expect(madeInChinaStoreUrl("made-in-china", "javascript:alert(1)")).toBeNull();
   });
 });

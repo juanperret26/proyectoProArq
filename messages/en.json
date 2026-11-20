@@ -209,6 +209,7 @@
     "verified": "Verified supplier",
     "productsTitle": "Products from this supplier",
     "noProducts": "No products listed yet.",
+    "officialPage": "Visit supplier page",
     "sourceNote": "Public company profile compiled from <link>Wikidata</link>, an open database. This company is not a ProArq member and has not been verified. We have no prices or products from it."
   },
   "footer": {
