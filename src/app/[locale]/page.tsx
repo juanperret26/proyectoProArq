@@ -52,10 +52,10 @@ export default async function HomePage() {
             aria-labelledby="legend-title"
             className="scroll-mt-8"
           >
-            <h2 id="legend-title" className="font-semibold">
+            <h2 id="legend-title" className="sr-only">
               {t("legendTitle")}
             </h2>
-            <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-9 sm:grid-cols-4">
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-9 sm:grid-cols-4">
               {CATEGORY_TAXONOMY.map((category, index) => (
                 <li key={category.slug}>
                   <Link
