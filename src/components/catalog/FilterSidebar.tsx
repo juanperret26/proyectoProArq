@@ -44,6 +44,22 @@ export async function FilterSidebar({
         <input key={name} type="hidden" name={name} value={value} />
       ))}
 
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-1 font-semibold">{t("filters.country")}</legend>
+        {options.countries.map((country) => (
+          <label key={country.code} className="flex items-center gap-2.5">
+            <input
+              type="checkbox"
+              name="country"
+              value={country.code}
+              defaultChecked={filters.countries.includes(country.code)}
+              className="size-4 accent-blueline"
+            />
+            {countryName(locale, country.code)}
+          </label>
+        ))}
+      </fieldset>
+
       <label className="flex flex-col gap-1.5">
         <span className="font-semibold">{t("sortLabel")}</span>
         <select name="sort" defaultValue={filters.sort} className={fieldClass}>
@@ -110,22 +126,6 @@ export async function FilterSidebar({
           className={fieldClass}
         />
       </label>
-
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 font-semibold">{t("filters.country")}</legend>
-        {options.countries.map((country) => (
-          <label key={country.code} className="flex items-center gap-2.5">
-            <input
-              type="checkbox"
-              name="country"
-              value={country.code}
-              defaultChecked={filters.countries.includes(country.code)}
-              className="size-4 accent-blueline"
-            />
-            {countryName(locale, country.code)}
-          </label>
-        ))}
-      </fieldset>
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 font-semibold">{t("filters.certifications")}</legend>

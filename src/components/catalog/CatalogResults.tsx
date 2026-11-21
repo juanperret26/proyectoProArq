@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { toQueryString, type SearchFilters } from "@/lib/catalog/filters";
 import { getFilterOptions, searchProducts } from "@/lib/catalog/queries";
 
+import { FilterDisclosure } from "./FilterDisclosure";
 import { FilterSidebar } from "./FilterSidebar";
 import { Pagination } from "./Pagination";
 import { ProductCard } from "./ProductCard";
@@ -39,13 +40,15 @@ export async function CatalogResults({ filters, basePath, category, hidden }: Pr
   return (
     <div className="grid gap-8 lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-start">
       <aside>
-        <FilterSidebar
-          filters={filters}
-          options={options}
-          basePath={basePath}
-          hidden={hidden}
-          clearHref={clearHref}
-        />
+        <FilterDisclosure label={t("filtersTitle")}>
+          <FilterSidebar
+            filters={filters}
+            options={options}
+            basePath={basePath}
+            hidden={hidden}
+            clearHref={clearHref}
+          />
+        </FilterDisclosure>
       </aside>
 
       <section aria-labelledby="results-count">

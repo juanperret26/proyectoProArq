@@ -177,14 +177,21 @@ export interface FilterOptions {
 
 export async function getFilterOptions(): Promise<FilterOptions> {
   const client = createPublicClient();
-  const [countries, certifications] = await Promise.all([
+  const [countries, suppliers, certifications] = await Promise.all([
     client.from("countries").select("code, name_en, name_es").order("name_en"),
+    client.from("suppliers").select("country_code"),
     client.from("certifications").select("code, name").order("code"),
   ]);
   if (countries.error) fail("cargar los países", countries.error);
+  if (suppliers.error) fail("cargar los países de los proveedores", suppliers.error);
   if (certifications.error) fail("cargar las certificaciones", certifications.error);
+  // Solo los países donde hay proveedores: el resto daría siempre cero resultados.
+  const withSuppliers = new Set(suppliers.data.map((row) => row.country_code));
   return {
-    countries: z.array(countrySchema).parse(countries.data),
+    countries: z
+      .array(countrySchema)
+      .parse(countries.data)
+      .filter((country) => withSuppliers.has(country.code)),
     certifications: z.array(certificationOptionSchema).parse(certifications.data),
   };
 }
