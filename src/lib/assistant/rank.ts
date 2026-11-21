@@ -22,8 +22,15 @@ export type ReasonCode =
   | "meetsMinOrder"
   | "minOrderAboveQuantity";
 
+/** Producto con precio publicado: solo esos se pueden ordenar por precio. */
+export type PricedProduct = ProductSummary & { price_from_usd: number };
+
+function hasPrice(product: ProductSummary): product is PricedProduct {
+  return product.price_from_usd !== null;
+}
+
 export interface RankedProduct {
-  product: ProductSummary;
+  product: PricedProduct;
   /** Entre 0 y 1; más alto es mejor. */
   score: number;
   reasons: ReasonCode[];
@@ -68,16 +75,16 @@ function comparableQuantity(product: ProductSummary, criteria: RankCriteria): nu
 
 function failsMinOrder(product: ProductSummary, criteria: RankCriteria): boolean {
   const quantity = comparableQuantity(product, criteria);
-  return quantity !== null && product.min_order_qty > quantity;
+  return quantity !== null && product.min_order_qty !== null && product.min_order_qty > quantity;
 }
 
 function meetsMinOrder(product: ProductSummary, criteria: RankCriteria): boolean {
   const quantity = comparableQuantity(product, criteria);
-  return quantity !== null && product.min_order_qty <= quantity;
+  return quantity !== null && product.min_order_qty !== null && product.min_order_qty <= quantity;
 }
 
 function reasonsFor(
-  product: ProductSummary,
+  product: PricedProduct,
   criteria: RankCriteria,
   price: Range,
   lead: Range,
@@ -109,19 +116,22 @@ function compareRanked(a: RankedProduct, b: RankedProduct, criteria: RankCriteri
  * no llegan al pedido mínimo van siempre después de los que sí.
  */
 export function rankProducts(
-  candidates: readonly ProductSummary[],
+  allCandidates: readonly ProductSummary[],
   criteria: RankCriteria,
   limit: number = DEFAULT_RANK_LIMIT,
 ): RankedProduct[] {
+  // Sin precio publicado no hay cómo compararlo: el asistente los deja fuera.
+  const candidates = allCandidates.filter(hasPrice);
   if (candidates.length === 0) return [];
   const price = rangeOf(candidates.map((p) => p.price_from_usd));
-  const lead = rangeOf(candidates.map((p) => p.lead_time_days));
+  const lead = rangeOf(candidates.flatMap((p) => (p.lead_time_days === null ? [] : [p.lead_time_days])));
   const weights = WEIGHTS[criteria.priority];
 
   const ranked = candidates.map((product): RankedProduct => {
     const base =
       weights.price * lowerIsBetter(product.price_from_usd, price) +
-      weights.leadTime * lowerIsBetter(product.lead_time_days, lead) +
+      weights.leadTime *
+        (product.lead_time_days === null ? 0 : lowerIsBetter(product.lead_time_days, lead)) +
       weights.verified * (product.is_verified ? 1 : 0);
     const score = failsMinOrder(product, criteria) ? base * MIN_ORDER_PENALTY : base;
     return { product, score, reasons: reasonsFor(product, criteria, price, lead) };

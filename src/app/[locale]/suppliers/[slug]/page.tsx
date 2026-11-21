@@ -8,7 +8,7 @@ import { Breadcrumb } from "@/components/catalog/Breadcrumb";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { countryName } from "@/lib/catalog/format";
 import { getSupplierDetail, getSupplierProducts } from "@/lib/catalog/queries";
-import { madeInChinaStoreUrl, wikidataProfileUrl } from "@/lib/catalog/source";
+import { marketplaceStoreUrl, wikidataProfileUrl } from "@/lib/catalog/source";
 import { pickLocalized } from "@/lib/i18n/localized";
 import { alternatesFor, siteUrl, truncateDescription } from "@/lib/seo/site";
 
@@ -58,7 +58,7 @@ async function SupplierContent({ params }: Props) {
   ]);
   const certs = supplier.certs.map((entry) => entry.certification);
   const wikidataUrl = wikidataProfileUrl(supplier.source_site, supplier.source_url);
-  const storeUrl = madeInChinaStoreUrl(supplier.source_site, supplier.source_url);
+  const storeUrl = marketplaceStoreUrl(supplier.source_site, supplier.source_url);
 
   return (
     <>

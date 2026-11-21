@@ -22,9 +22,18 @@ describe("buildSeedData", () => {
     // Los rubros siguientes (maquinaria, camiones, prefabricados, metales) se
     // llenan con datos reales de Made-in-China, no con el catálogo de ejemplo.
     const DEMO_TOP_LEVEL_COUNT = 8;
+    // Subrubros agregados después para los proveedores de Taiwán y Turquía.
+    const ADDED_LATER = new Set([
+      "drywall-plaster",
+      "flooring",
+      "heating-ventilation",
+      "roof-windows",
+      "sandwich-panels",
+      "acoustic-insulation",
+    ]);
     const covered = new Set(data.products.map((p) => p.categorySlug));
     const expected = CATEGORY_TAXONOMY.slice(0, DEMO_TOP_LEVEL_COUNT).flatMap((c) =>
-      c.children.map((s) => s.slug),
+      c.children.map((s) => s.slug).filter((slug) => !ADDED_LATER.has(slug)),
     );
     expect(expected.filter((slug) => !covered.has(slug))).toEqual([]);
   });

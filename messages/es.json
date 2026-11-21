@@ -82,6 +82,8 @@
       "moq": "Pedido mín.",
       "leadTime": "Plazo",
       "days": "{count} días",
+      "priceOnRequest": "Precio a consultar",
+      "notSpecified": "No especificado",
       "verified": "Verificado"
     },
     "pagination": {

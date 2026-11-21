@@ -56,6 +56,11 @@ export const CATEGORY_TAXONOMY: readonly TaxonomyCategory[] = [
         nameEn: "Mortars & tile adhesives",
         nameEs: "Morteros y adhesivos",
       },
+      {
+        slug: "drywall-plaster",
+        nameEn: "Drywall & plaster",
+        nameEs: "Placas de yeso y revoques",
+      },
     ],
   },
   {
@@ -108,6 +113,11 @@ export const CATEGORY_TAXONOMY: readonly TaxonomyCategory[] = [
         nameEn: "Natural stone slabs",
         nameEs: "Placas de piedra natural",
       },
+      {
+        slug: "flooring",
+        nameEn: "Flooring",
+        nameEs: "Pisos y revestimientos de piso",
+      },
     ],
   },
   {
@@ -131,6 +141,11 @@ export const CATEGORY_TAXONOMY: readonly TaxonomyCategory[] = [
         slug: "pipes-fittings",
         nameEn: "Pipes & fittings",
         nameEs: "Caños y accesorios",
+      },
+      {
+        slug: "heating-ventilation",
+        nameEn: "Heating & ventilation",
+        nameEs: "Calefacción y ventilación",
       },
     ],
   },
@@ -159,6 +174,11 @@ export const CATEGORY_TAXONOMY: readonly TaxonomyCategory[] = [
         slug: "door-hardware",
         nameEn: "Door hardware",
         nameEs: "Herrajes para puertas",
+      },
+      {
+        slug: "roof-windows",
+        nameEn: "Roof windows & skylights",
+        nameEs: "Ventanas de techo y tragaluces",
       },
     ],
   },
@@ -243,6 +263,16 @@ export const CATEGORY_TAXONOMY: readonly TaxonomyCategory[] = [
         slug: "waterproofing-membranes",
         nameEn: "Waterproofing membranes",
         nameEs: "Membranas impermeabilizantes",
+      },
+      {
+        slug: "sandwich-panels",
+        nameEn: "Sandwich panels",
+        nameEs: "Paneles sándwich",
+      },
+      {
+        slug: "acoustic-insulation",
+        nameEn: "Acoustic insulation",
+        nameEs: "Aislación acústica",
       },
     ],
   },

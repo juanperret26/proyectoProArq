@@ -3,7 +3,19 @@
  * usa esta misma lista para `images.remotePatterns`: una URL de otro host haría
  * fallar `next/image`, así que se descarta antes de renderizar.
  */
-export const IMAGE_HOSTS: readonly string[] = ["image.made-in-china.com"];
+export const IMAGE_HOSTS: readonly string[] = [
+  "image.made-in-china.com",
+  "5.imimg.com",
+  // Sitios oficiales de las empresas de Taiwán y Turquía.
+  "www.shehfung.com",
+  "www.3yyalitim.com",
+  "feltouch.tr",
+  "emaks.com.tr",
+  "www.assanpanel.com",
+  "novawood.com",
+  "www.geberit.com.tr",
+  "www.newarc.com.tr",
+];
 
 function isDisplayable(url: string): boolean {
   try {

@@ -33,8 +33,8 @@ export interface ProductFacts {
   responseTimeHours: number | null;
   certifications: string[];
   unit: string;
-  minOrder: number;
-  leadTimeDays: number;
+  minOrder: number | null;
+  leadTimeDays: number | null;
   priceTiers: { fromQty: number; unitPriceUsd: number }[];
 }
 

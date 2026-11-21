@@ -30,6 +30,7 @@ function rankBy(
 }
 
 function priceTiersCell(product: ProductDetail, context: RowContext): ReactNode {
+  if (product.price_tiers.length === 0) return context.catalog("card.priceOnRequest");
   return (
     <ul className="flex flex-col gap-1">
       {[...product.price_tiers]
@@ -67,7 +68,9 @@ export function commercialRows(
       key: "moq",
       label: context.compare("rows.moq"),
       cells: products.map((product) =>
-        quantityWithUnit(context.catalog, product.unit, product.min_order_qty, context.locale),
+        product.min_order_qty === null
+          ? context.catalog("card.notSpecified")
+          : quantityWithUnit(context.catalog, product.unit, product.min_order_qty, context.locale),
       ),
       best: sameUnit ? rankBy(products, (p) => p.min_order_qty, "min") : [],
       note: unitNote,
@@ -75,7 +78,11 @@ export function commercialRows(
     {
       key: "lead",
       label: context.compare("rows.leadTime"),
-      cells: products.map((p) => context.catalog("card.days", { count: p.lead_time_days })),
+      cells: products.map((p) =>
+        p.lead_time_days === null
+          ? context.catalog("card.notSpecified")
+          : context.catalog("card.days", { count: p.lead_time_days }),
+      ),
       best: rankBy(products, (p) => p.lead_time_days, "min"),
     },
   ];

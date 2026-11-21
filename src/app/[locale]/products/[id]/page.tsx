@@ -149,43 +149,51 @@ async function ProductContent({ params }: Props) {
             >
               {t("priceTiers")}
             </h2>
-            <table className="w-full text-left">
-              <thead className="text-[0.875rem] text-ink-soft">
-                <tr>
-                  <th scope="col" className="px-5 py-2 font-normal">
-                    {t("quantity")}
-                  </th>
-                  <th scope="col" className="px-5 py-2 text-right font-normal">
-                    {t("unitPrice")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {product.price_tiers.map((tier) => (
-                  <tr key={tier.min_qty} className="border-t border-rule">
-                    <td className="px-5 py-3 tabular-nums">
-                      {t("tierQty", { quantity: quantityWithUnit(c, product.unit, tier.min_qty, locale) })}
-                    </td>
-                    <td className="px-5 py-3 text-right font-display text-[1.5rem] font-bold tabular-nums">
-                      {formatUsd(locale, tier.unit_price_usd)}
-                    </td>
+            {product.price_tiers.length === 0 ? (
+              <p className="px-5 py-4 text-ink-soft">{c("card.priceOnRequest")}</p>
+            ) : (
+              <table className="w-full text-left">
+                <thead className="text-[0.875rem] text-ink-soft">
+                  <tr>
+                    <th scope="col" className="px-5 py-2 font-normal">
+                      {t("quantity")}
+                    </th>
+                    <th scope="col" className="px-5 py-2 text-right font-normal">
+                      {t("unitPrice")}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {product.price_tiers.map((tier) => (
+                    <tr key={tier.min_qty} className="border-t border-rule">
+                      <td className="px-5 py-3 tabular-nums">
+                        {t("tierQty", { quantity: quantityWithUnit(c, product.unit, tier.min_qty, locale) })}
+                      </td>
+                      <td className="px-5 py-3 text-right font-display text-[1.5rem] font-bold tabular-nums">
+                        {formatUsd(locale, tier.unit_price_usd)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </section>
 
           <dl className="grid grid-cols-2 gap-x-6 gap-y-4 border-y border-rule py-5">
             <div>
               <dt className="text-ink-soft">{t("minOrder")}</dt>
               <dd className="font-semibold tabular-nums">
-                {quantityWithUnit(c, product.unit, product.min_order_qty, locale)}
+                {product.min_order_qty === null
+                  ? c("card.notSpecified")
+                  : quantityWithUnit(c, product.unit, product.min_order_qty, locale)}
               </dd>
             </div>
             <div>
               <dt className="text-ink-soft">{t("leadTime")}</dt>
               <dd className="font-semibold tabular-nums">
-                {c("card.days", { count: product.lead_time_days })}
+                {product.lead_time_days === null
+                  ? c("card.notSpecified")
+                  : c("card.days", { count: product.lead_time_days })}
               </dd>
             </div>
             <div>

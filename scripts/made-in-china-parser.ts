@@ -69,7 +69,7 @@ const UNIT_CODES: Readonly<Record<string, string>> = {
   units: "unit",
 };
 
-const UNIT_LABELS: Readonly<Record<string, { en: string; es: string }>> = {
+export const UNIT_LABELS: Readonly<Record<string, { en: string; es: string }>> = {
   m2: { en: "m²", es: "m²" },
   piece: { en: "pieces", es: "piezas" },
   ton: { en: "tons", es: "toneladas" },
@@ -158,7 +158,7 @@ export interface MicSupplier {
   readonly certifications: readonly string[];
   readonly descriptionEn: string;
   readonly descriptionEs: string;
-  readonly sourceUrl: string;
+  readonly sourceUrl: string | null;
   readonly externalId: string;
   readonly scrapedAt: string;
 }
@@ -179,12 +179,13 @@ export interface MicProduct {
   readonly descriptionEs: string | null;
   readonly specs: readonly MicSpec[];
   readonly unit: string;
-  readonly minOrder: number;
-  readonly leadTimeDays: number;
-  readonly priceFrom: number;
+  /** null cuando la empresa no publica pedido mínimo, plazo o precio. */
+  readonly minOrder: number | null;
+  readonly leadTimeDays: number | null;
+  readonly priceFrom: number | null;
   readonly tiers: readonly { minQty: number; unitPrice: number }[];
   readonly imageUrls: readonly string[];
-  readonly sourceUrl: string;
+  readonly sourceUrl: string | null;
   readonly scrapedAt: string;
 }
 
@@ -446,6 +447,7 @@ export function buildMadeInChinaData(rows: readonly CsvRow[], options: BuildOpti
 
 export const sql = (value: string): string => `'${value.replace(/'/g, "''")}'`;
 const sqlOrNull = (value: string | null): string => (value === null ? "null" : sql(value));
+const numOrNull = (value: number | null): string => (value === null ? "null" : String(value));
 const values = (rows: readonly string[]): string => rows.join(",\n  ");
 
 const HEADER = [
@@ -461,13 +463,17 @@ const HEADER = [
   "--  * description_en y description_es se arman con los datos del listado.",
 ].join("\n");
 
-export function renderMadeInChinaSql(data: MicData, header: string = HEADER): string {
+export function renderMadeInChinaSql(
+  data: MicData,
+  header: string = HEADER,
+  sourceSite: string = SOURCE_SITE,
+): string {
   const parts = [
     header,
-    renderSuppliers(data.suppliers),
-    renderCertifications(data.suppliers),
-    renderProducts(data.products),
-    renderPriceTiers(data.products),
+    renderSuppliers(data.suppliers, sourceSite),
+    renderCertifications(data.suppliers, sourceSite),
+    renderProducts(data.products, sourceSite),
+    renderPriceTiers(data.products, sourceSite),
   ].filter((part) => part !== "");
   return parts.join("\n\n") + "\n";
 }
@@ -482,37 +488,38 @@ export function renderCategoryRealignSql(products: readonly MicProduct[]): strin
   return `update public.products p\nset category_id = c.id\nfrom (values\n  ${values(rows)}\n) as v (external_id, category_slug)\njoin public.categories c on c.slug = v.category_slug\nwhere p.source_site = ${sql(SOURCE_SITE)} and p.source_external_id = v.external_id and p.category_id <> c.id;\n`;
 }
 
-function renderSuppliers(suppliers: readonly MicSupplier[]): string {
+function renderSuppliers(suppliers: readonly MicSupplier[], sourceSite: string): string {
   const rows = suppliers.map(
     (s) =>
-      `(${sql(s.slug)}, ${sql(s.name)}, ${sql(s.countryCode)}, ${sql(s.city)}, ${s.foundedYear ?? "null"}, ${sql(s.businessType)}, false, ${sql(s.descriptionEn)}, ${sql(s.descriptionEs)}, ${sql(SOURCE_SITE)}, ${sql(s.sourceUrl)}, ${sql(s.externalId)}, ${sql(s.scrapedAt)}::timestamptz)`,
+      `(${sql(s.slug)}, ${sql(s.name)}, ${sql(s.countryCode)}, ${sql(s.city)}, ${s.foundedYear ?? "null"}, ${sql(s.businessType)}, false, ${sql(s.descriptionEn)}, ${sql(s.descriptionEs)}, ${sql(sourceSite)}, ${sqlOrNull(s.sourceUrl)}, ${sql(s.externalId)}, ${sql(s.scrapedAt)}::timestamptz)`,
   );
   return `insert into public.suppliers (slug, name, country_code, city, founded_year, business_type, is_verified, description_en, description_es, source_site, source_url, source_external_id, scraped_at) values\n  ${values(rows)}\non conflict do nothing;`;
 }
 
-function renderCertifications(suppliers: readonly MicSupplier[]): string {
+function renderCertifications(suppliers: readonly MicSupplier[], sourceSite: string): string {
   const rows = suppliers.flatMap((s) =>
     s.certifications.map((code) => `(${sql(s.externalId)}, ${sql(code)})`),
   );
   if (rows.length === 0) return "";
-  return `insert into public.supplier_certifications (supplier_id, certification_code)\nselect s.id, v.code\nfrom (values\n  ${values(rows)}\n) as v (supplier_external_id, code)\njoin public.suppliers s on s.source_site = ${sql(SOURCE_SITE)} and s.source_external_id = v.supplier_external_id\non conflict do nothing;`;
+  return `insert into public.supplier_certifications (supplier_id, certification_code)\nselect s.id, v.code\nfrom (values\n  ${values(rows)}\n) as v (supplier_external_id, code)\njoin public.suppliers s on s.source_site = ${sql(sourceSite)} and s.source_external_id = v.supplier_external_id\non conflict do nothing;`;
 }
 
 function imageArray(urls: readonly string[]): string {
   return urls.length === 0 ? "'{}'::text[]" : `array[${urls.map(sql).join(", ")}]::text[]`;
 }
 
-function renderProducts(products: readonly MicProduct[]): string {
+function renderProducts(products: readonly MicProduct[], sourceSite: string): string {
   const rows = products.map(
     (p) =>
-      `(${sql(p.supplierExternalId)}, ${sql(p.categorySlug)}, ${sql(p.nameEn)}, ${sqlOrNull(p.nameEs)}, ${sql(p.descriptionEn)}, ${sqlOrNull(p.descriptionEs)}, ${sql(JSON.stringify(p.specs))}, ${sql(p.unit)}, ${p.minOrder}, ${p.leadTimeDays}, ${p.priceFrom}, ${imageArray(p.imageUrls)}, ${sql(p.sourceUrl)}, ${sql(p.externalId)}, ${sql(p.scrapedAt)})`,
+      `(${sql(p.supplierExternalId)}, ${sql(p.categorySlug)}, ${sql(p.nameEn)}, ${sqlOrNull(p.nameEs)}, ${sql(p.descriptionEn)}, ${sqlOrNull(p.descriptionEs)}, ${sql(JSON.stringify(p.specs))}, ${sql(p.unit)}, ${numOrNull(p.minOrder)}::numeric, ${numOrNull(p.leadTimeDays)}::integer, ${numOrNull(p.priceFrom)}::numeric, ${imageArray(p.imageUrls)}, ${sqlOrNull(p.sourceUrl)}, ${sql(p.externalId)}, ${sql(p.scrapedAt)})`,
   );
-  return `insert into public.products (supplier_id, category_id, name_en, name_es, description_en, description_es, specs, unit, min_order_qty, lead_time_days, price_from_usd, image_urls, source_site, source_url, source_external_id, scraped_at)\nselect s.id, c.id, v.name_en, v.name_es, v.description_en, v.description_es, v.specs::jsonb, v.unit, v.min_order_qty, v.lead_time_days, v.price_from_usd, v.image_urls, ${sql(SOURCE_SITE)}, v.source_url, v.external_id, v.scraped_at::timestamptz\nfrom (values\n  ${values(rows)}\n) as v (supplier_external_id, category_slug, name_en, name_es, description_en, description_es, specs, unit, min_order_qty, lead_time_days, price_from_usd, image_urls, source_url, external_id, scraped_at)\njoin public.suppliers s on s.source_site = ${sql(SOURCE_SITE)} and s.source_external_id = v.supplier_external_id\njoin public.categories c on c.slug = v.category_slug\non conflict (source_site, source_external_id) do nothing;`;
+  return `insert into public.products (supplier_id, category_id, name_en, name_es, description_en, description_es, specs, unit, min_order_qty, lead_time_days, price_from_usd, image_urls, source_site, source_url, source_external_id, scraped_at)\nselect s.id, c.id, v.name_en, v.name_es, v.description_en, v.description_es, v.specs::jsonb, v.unit, v.min_order_qty, v.lead_time_days, v.price_from_usd, v.image_urls, ${sql(sourceSite)}, v.source_url, v.external_id, v.scraped_at::timestamptz\nfrom (values\n  ${values(rows)}\n) as v (supplier_external_id, category_slug, name_en, name_es, description_en, description_es, specs, unit, min_order_qty, lead_time_days, price_from_usd, image_urls, source_url, external_id, scraped_at)\njoin public.suppliers s on s.source_site = ${sql(sourceSite)} and s.source_external_id = v.supplier_external_id\njoin public.categories c on c.slug = v.category_slug\non conflict (source_site, source_external_id) do nothing;`;
 }
 
-function renderPriceTiers(products: readonly MicProduct[]): string {
+function renderPriceTiers(products: readonly MicProduct[], sourceSite: string): string {
   const rows = products.flatMap((p) =>
     p.tiers.map((t) => `(${sql(p.externalId)}, ${t.minQty}, ${t.unitPrice})`),
   );
-  return `insert into public.price_tiers (product_id, min_qty, unit_price_usd)\nselect p.id, v.min_qty, v.unit_price_usd\nfrom (values\n  ${values(rows)}\n) as v (external_id, min_qty, unit_price_usd)\njoin public.products p on p.source_site = ${sql(SOURCE_SITE)} and p.source_external_id = v.external_id\non conflict do nothing;`;
+  if (rows.length === 0) return "";
+  return `insert into public.price_tiers (product_id, min_qty, unit_price_usd)\nselect p.id, v.min_qty, v.unit_price_usd\nfrom (values\n  ${values(rows)}\n) as v (external_id, min_qty, unit_price_usd)\njoin public.products p on p.source_site = ${sql(sourceSite)} and p.source_external_id = v.external_id\non conflict do nothing;`;
 }

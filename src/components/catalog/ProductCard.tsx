@@ -60,26 +60,36 @@ export async function ProductCard({ product }: Props) {
           <span aria-hidden="true">·</span>
           <span>{countryName(locale, product.country_code)}</span>
         </p>
-        <p className="mt-auto pt-2">
-          <span className="text-[0.8125rem] uppercase tracking-wide text-ink-soft">
-            {t("card.from")}
-          </span>{" "}
-          <span className="font-display text-[1.75rem] font-bold leading-none tabular-nums">
-            {formatUsd(locale, product.price_from_usd)}
-          </span>{" "}
-          <span className="text-ink-soft">{t("card.perUnit", { unit })}</span>
-        </p>
+        {product.price_from_usd === null ? (
+          <p className="mt-auto pt-2 font-display text-[1.25rem] font-bold leading-none">
+            {t("card.priceOnRequest")}
+          </p>
+        ) : (
+          <p className="mt-auto pt-2">
+            <span className="text-[0.8125rem] uppercase tracking-wide text-ink-soft">
+              {t("card.from")}
+            </span>{" "}
+            <span className="font-display text-[1.75rem] font-bold leading-none tabular-nums">
+              {formatUsd(locale, product.price_from_usd)}
+            </span>{" "}
+            <span className="text-ink-soft">{t("card.perUnit", { unit })}</span>
+          </p>
+        )}
         <dl className="grid grid-cols-2 gap-x-3 border-t border-rule pt-3 text-[0.875rem]">
           <div>
             <dt className="text-ink-soft">{t("card.moq")}</dt>
             <dd className="font-semibold tabular-nums">
-              {quantityWithUnit(t, product.unit, product.min_order_qty, locale)}
+              {product.min_order_qty === null
+                ? t("card.notSpecified")
+                : quantityWithUnit(t, product.unit, product.min_order_qty, locale)}
             </dd>
           </div>
           <div>
             <dt className="text-ink-soft">{t("card.leadTime")}</dt>
             <dd className="font-semibold tabular-nums">
-              {t("card.days", { count: product.lead_time_days })}
+              {product.lead_time_days === null
+                ? t("card.notSpecified")
+                : t("card.days", { count: product.lead_time_days })}
             </dd>
           </div>
         </dl>

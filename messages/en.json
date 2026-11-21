@@ -82,6 +82,8 @@
       "moq": "Min. order",
       "leadTime": "Lead time",
       "days": "{count} days",
+      "priceOnRequest": "Price on request",
+      "notSpecified": "Not specified",
       "verified": "Verified"
     },
     "pagination": {

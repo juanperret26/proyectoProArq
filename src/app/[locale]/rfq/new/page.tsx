@@ -48,7 +48,11 @@ async function NewRfqContent({ searchParams }: Props) {
         locale={locale}
         unit={unit}
         minOrder={product.min_order_qty}
-        minOrderLabel={quantityWithUnit(c, product.unit, product.min_order_qty, locale)}
+        minOrderLabel={
+          product.min_order_qty === null
+            ? null
+            : quantityWithUnit(c, product.unit, product.min_order_qty, locale)
+        }
       />
     </>
   );

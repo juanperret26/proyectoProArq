@@ -18,7 +18,11 @@
     "scrape:made-in-china-suppliers": "tsx scripts/scrape-made-in-china-suppliers.ts",
     "db:made-in-china-suppliers": "tsx scripts/generate-made-in-china-suppliers-sql.ts",
     "db:run-sql": "tsx --env-file=.env.local scripts/run-sql-file.ts",
-    "db:seed": "tsx --env-file=.env.local scripts/load-seed.ts"
+    "db:seed": "tsx --env-file=.env.local scripts/load-seed.ts",
+    "db:indiamart": "tsx scripts/generate-indiamart-sql.ts",
+    "db:categories": "tsx scripts/generate-categories-sql.ts",
+    "db:directory": "tsx scripts/generate-directory-sql.ts",
+    "db:directory-images": "tsx scripts/generate-directory-images-sql.ts"
   },
   "dependencies": {
     "@clerk/localizations": "^4.25.0",

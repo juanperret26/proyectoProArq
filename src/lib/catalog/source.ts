@@ -15,17 +15,26 @@ export function wikidataProfileUrl(
   return WIKIDATA_ITEM_URL.test(sourceUrl) ? sourceUrl : null;
 }
 
-const MADE_IN_CHINA_SOURCE = "made-in-china";
-const MADE_IN_CHINA_STORE_URL = /^https:\/\/[a-z0-9-]+\.en\.made-in-china\.com\/?$/;
+/** Sitio oficial de una empresa de un directorio: cualquier dirección https sin espacios ni comillas. */
+const OFFICIAL_SITE = /^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(\/[^\s"'<>]*)?$/i;
+
+const STORE_URL_PATTERNS: Readonly<Record<string, RegExp>> = {
+  "made-in-china": /^https:\/\/[a-z0-9-]+\.en\.made-in-china\.com\/?$/,
+  indiamart: /^https:\/\/www\.indiamart\.com\/[a-z0-9-]+\/?$/,
+  kompass: OFFICIAL_SITE,
+  dalil: OFFICIAL_SITE,
+};
 
 /**
- * Página del proveedor en Made-in-China.com. Solo se acepta la tienda por https
- * en el subdominio `.en.made-in-china.com`: el valor sale de la base y va a `href`.
+ * Página del proveedor en su marketplace de origen (Made-in-China.com o
+ * IndiaMART). Solo se acepta el formato exacto de cada tienda por https: el
+ * valor sale de la base y va a `href`.
  */
-export function madeInChinaStoreUrl(
+export function marketplaceStoreUrl(
   sourceSite: string,
   sourceUrl: string | null,
 ): string | null {
-  if (sourceSite !== MADE_IN_CHINA_SOURCE || sourceUrl === null) return null;
-  return MADE_IN_CHINA_STORE_URL.test(sourceUrl) ? sourceUrl : null;
+  const pattern = STORE_URL_PATTERNS[sourceSite];
+  if (sourceUrl === null || !pattern) return null;
+  return pattern.test(sourceUrl) ? sourceUrl : null;
 }

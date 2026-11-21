@@ -14,9 +14,9 @@ type Props = {
   productId: string;
   locale: string;
   unit: string;
-  minOrder: number;
+  minOrder: number | null;
   /** Pedido mínimo ya formateado con su unidad en singular o plural. */
-  minOrderLabel: string;
+  minOrderLabel: string | null;
 };
 
 export function RfqForm({ productId, locale, unit, minOrder, minOrderLabel }: Props) {
@@ -36,7 +36,7 @@ export function RfqForm({ productId, locale, unit, minOrder, minOrderLabel }: Pr
       <FormField
         id="quantity"
         label={t("quantity", { unit })}
-        hint={t("minOrderHint", { quantity: minOrderLabel })}
+        hint={minOrderLabel === null ? undefined : t("minOrderHint", { quantity: minOrderLabel })}
         error={message("quantity")}
       >
         {(p) => (
@@ -44,7 +44,7 @@ export function RfqForm({ productId, locale, unit, minOrder, minOrderLabel }: Pr
             id={p.id}
             name="quantity"
             inputMode="decimal"
-            defaultValue={minOrder}
+            defaultValue={minOrder ?? undefined}
             aria-invalid={p.invalid}
             aria-describedby={p.describedBy}
             className={`${INPUT_CLASS} sm:max-w-48`}
