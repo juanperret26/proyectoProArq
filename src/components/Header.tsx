@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { Sparkles } from "lucide-react";
 import { CompareNavLink } from "@/components/compare/CompareNavLink";
 import { Link } from "@/i18n/navigation";
 import { CATEGORY_TAXONOMY } from "@/lib/catalog/taxonomy";
@@ -36,8 +37,12 @@ export async function Header() {
           navLabel={t("railNav")}
         >
           <li>
-            <Link href="/assistant" className={MENU_TOOL_LINK}>
-              {t("assistant")}
+            <Link
+              href="/assistant"
+              className={`${MENU_TOOL_LINK} flex items-center gap-2 font-medium text-blueline`}
+            >
+              <Sparkles className="size-4 shrink-0 text-blueline" aria-hidden="true" />
+              <span>{t("assistant")}</span>
             </Link>
           </li>
           <li>
@@ -53,8 +58,12 @@ export async function Header() {
           <SearchForm />
         </div>
         <div className="ml-auto flex items-center gap-0.5 sm:gap-1">
-          <Link href="/assistant" className="btn btn-quiet max-lg:hidden">
-            {t("assistant")}
+          <Link
+            href="/assistant"
+            className="btn btn-primary gap-1.5 px-3 max-lg:hidden"
+          >
+            <Sparkles className="size-4 shrink-0" aria-hidden="true" />
+            <span>{t("assistant")}</span>
           </Link>
           <CompareNavLink className="btn btn-quiet max-lg:hidden">
             {t("compare")}
