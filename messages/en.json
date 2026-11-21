@@ -26,7 +26,7 @@
     "target": "Español"
   },
   "home": {
-    "title": "Construction materials from five countries, compared line by line.",
+    "title": "Construction materials, compared line by line.",
     "lead": "Search products from suppliers in China, India, Taiwan, Türkiye and Vietnam. Put price, minimum order and lead time next to each other, then request quotes from the ones that fit.",
     "browse": "Browse materials",
     "describe": "Describe your project to the assistant",
@@ -288,13 +288,17 @@
     "label": "Your request",
     "placeholder": "e.g. 500 m² porcelain tile from Vietnam, cheapest",
     "submit": "Find products",
+    "clear": "New request",
     "hint": "Up to {max} characters. Works in English or Spanish.",
     "examplesTitle": "Try an example",
     "examples": {
       "tiles": "500 m² porcelain tile from Vietnam, cheapest",
       "cement": "200 bags of portland cement, urgent, not from China",
       "lighting": "LED lighting under $15, CE certified",
-      "toilets": "Toilets from verified suppliers"
+      "toilets": "Toilets from verified suppliers",
+      "scaffolding": "Scaffolding from India, cheapest",
+      "steel": "Structural steel from India, cheapest",
+      "pipes": "Steel pipes from China, cheapest"
     },
     "offTopicTitle": "I can only help with construction materials",
     "offTopicBody": "Name a material, for example tiles, cement, rebar, faucets or LED lights. You can add quantity, budget and countries.",

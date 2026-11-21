@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Form from "next/form";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { AssistantComposer } from "@/components/assistant/AssistantComposer";
 import { AssistantResults } from "@/components/assistant/AssistantResults";
 import { ResultsSkeleton } from "@/components/catalog/CatalogResults";
 import { Link } from "@/i18n/navigation";
@@ -14,7 +14,15 @@ type Props = {
   searchParams: Promise<RawSearchParams>;
 };
 
-const EXAMPLE_KEYS = ["tiles", "cement", "lighting", "toilets"] as const;
+const EXAMPLE_KEYS = [
+  "tiles",
+  "cement",
+  "lighting",
+  "toilets",
+  "scaffolding",
+  "steel",
+  "pipes",
+] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -24,11 +32,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function AssistantPage({ searchParams }: Props) {
   return (
-    <div className="mx-auto max-w-[1240px] px-4 py-10 sm:px-6">
-      <Suspense fallback={<ResultsSkeleton />}>
-        <AssistantContent searchParams={searchParams} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="assistant-page min-h-[60svh]" aria-busy="true" />}>
+      <AssistantContent searchParams={searchParams} />
+    </Suspense>
   );
 }
 
@@ -38,71 +44,75 @@ function readQuery(raw: RawSearchParams): string | null {
   return text ? text : null;
 }
 
+/**
+ * Pantalla tipo chat: sin pedido, título y caja al centro; con pedido, las
+ * recomendaciones quedan arriba y la caja de texto debajo de ellas.
+ */
 async function AssistantContent({ searchParams }: Props) {
   const query = readQuery(await searchParams);
   const [t, locale] = await Promise.all([getTranslations("assistant"), getLocale()]);
 
   return (
-    <>
-      <header className="max-w-[60ch]">
-        <h1 className="text-balance font-display text-[clamp(2rem,1.4rem+2.4vw,3.25rem)] font-extrabold leading-none">
-          {t("title")}
-        </h1>
-        <p className="mt-4 text-ink-soft">{t("lead")}</p>
-      </header>
-
-      <Form action={`/${locale}/assistant`} className="mt-8 max-w-[52rem]">
-        <label htmlFor="assistant-q" className="font-semibold">
-          {t("label")}
-        </label>
-        <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-          <input
-            id="assistant-q"
-            type="search"
-            name="q"
-            defaultValue={query ?? ""}
-            maxLength={MAX_QUERY_LENGTH}
-            placeholder={t("placeholder")}
-            autoComplete="off"
-            enterKeyHint="search"
-            aria-describedby="assistant-hint"
-            className="h-12 min-w-0 flex-1 rounded-control border border-rule-strong bg-paper px-3.5 text-ink placeholder:text-ink-soft focus-visible:border-blueline focus-visible:outline-offset-0"
-          />
-          <button type="submit" className="btn btn-primary h-12">
-            {t("submit")}
-          </button>
-        </div>
-        <p id="assistant-hint" className="mt-2 text-[0.875rem] text-ink-soft">
-          {t("hint", { max: MAX_QUERY_LENGTH })}
-        </p>
-      </Form>
-
-      <nav aria-labelledby="assistant-examples" className="mt-6">
-        <h2 id="assistant-examples" className="text-[0.875rem] font-semibold text-ink-soft">
-          {t("examplesTitle")}
-        </h2>
-        <ul className="mt-2 flex flex-wrap gap-2">
-          {EXAMPLE_KEYS.map((key) => {
-            const example = t(`examples.${key}`);
-            return (
-              <li key={key}>
-                <Link
-                  href={{ pathname: "/assistant", query: { q: example } }}
-                  className="inline-block rounded-control border border-rule px-3 py-1.5 text-[0.9375rem] hover:border-blueline hover:text-blueline"
-                >
-                  {example}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
+    <section
+      className={`assistant-page flex min-h-[calc(100svh-9rem)] flex-col px-4 pb-14 pt-10 sm:px-6 ${
+        query ? "justify-end" : "justify-center"
+      }`}
+    >
       {query ? (
-        <Suspense key={query} fallback={<ResultsSkeleton />}>
-          <AssistantResults query={query} />
-        </Suspense>
-      ) : null}
-    </>
+        <>
+          <h1 className="sr-only">{t("title")}</h1>
+          <div className="mx-auto mb-10 w-full max-w-[1240px]">
+            <Suspense key={query} fallback={<ResultsSkeleton />}>
+              <AssistantResults query={query} />
+            </Suspense>
+          </div>
+        </>
+      ) : (
+        <header className="mx-auto mb-8 text-center">
+          <h1 className="text-balance text-[clamp(2.25rem,1.5rem+2.4vw,3.5rem)] font-semibold leading-[1.1] tracking-[-0.04em] text-[#1c1c1c]">
+            {t("title")}
+          </h1>
+          {t.has("lead") ? (
+            <p className="mx-auto mt-3 max-w-[52ch] text-balance text-[1.125rem] text-[#6b6b66]">
+              {t("lead")}
+            </p>
+          ) : null}
+        </header>
+      )}
+
+      <div className="mx-auto w-full max-w-[38rem]">
+        <AssistantComposer
+          action={`/${locale}/assistant`}
+          defaultValue={query ?? ""}
+          placeholder={t("placeholder")}
+          label={t.has("label") ? t("label") : t("title")}
+          submitLabel={t("submit")}
+          clearLabel={t("clear")}
+          hint={t("hint", { max: MAX_QUERY_LENGTH })}
+          maxLength={MAX_QUERY_LENGTH}
+        />
+
+        <nav aria-labelledby="assistant-examples" className="mt-6 text-center">
+          <h2 id="assistant-examples" className="text-[0.875rem] font-semibold text-[#6b6b66]">
+            {t("examplesTitle")}
+          </h2>
+          <ul className="mt-3 flex flex-wrap justify-center gap-2">
+            {EXAMPLE_KEYS.map((key) => {
+              const example = t(`examples.${key}`);
+              return (
+                <li key={key}>
+                  <Link
+                    href={{ pathname: "/assistant", query: { q: example } }}
+                    className="inline-block rounded-full bg-white/80 px-4 py-2 text-[0.9375rem] text-[#1c1c1c] shadow-sm ring-1 ring-black/5 backdrop-blur transition hover:bg-white hover:text-blueline hover:ring-blueline"
+                  >
+                    {example}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+    </section>
   );
 }

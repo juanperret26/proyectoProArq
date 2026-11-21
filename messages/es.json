@@ -26,8 +26,8 @@
     "target": "English"
   },
   "home": {
-    "title": "Materiales de construcción de cinco países, comparados línea por línea.",
-    "lead": "Busque productos de proveedores de China, India, Taiwán, Turquía y Vietnam. Ponga lado a lado precio, pedido mínimo y plazo de entrega, y pida cotizaciones a los que le convengan.",
+    "title": "Materiales de construcción, comparados línea por línea.",
+    "lead": "Busque productos especifico de proveedores y compara lado a lado el precio, pedido mínimo, plazo de entrega, y pedí cotizaciones a los que más le convengan.",
     "browse": "Ver materiales",
     "describe": "Describa su proyecto al asistente",
     "legendTitle": "Buscar por material",
@@ -284,17 +284,19 @@
   },
   "assistant": {
     "title": "Describa lo que necesita",
-    "lead": "Escriba el material, la cantidad, el presupuesto y de dónde prefiere comprar. El asistente elige productos reales del catálogo y le explica por qué le sirve cada uno.",
-    "label": "Su pedido",
     "placeholder": "p. ej. 500 m² de porcelanato de Vietnam, el más barato",
     "submit": "Buscar productos",
+    "clear": "Nuevo pedido",
     "hint": "Hasta {max} caracteres. Funciona en español o en inglés.",
     "examplesTitle": "Pruebe con un ejemplo",
     "examples": {
       "tiles": "500 m² de porcelanato de Vietnam, el más barato",
       "cement": "200 bolsas de cemento portland, urgente, que no sea de China",
       "lighting": "Iluminación LED de menos de $15, con certificación CE",
-      "toilets": "Inodoros de proveedores verificados"
+      "toilets": "Inodoros de proveedores verificados",
+      "scaffolding": "Andamios de India, el más barato",
+      "steel": "Acero estructural de India, el más barato",
+      "pipes": "Tubos de acero de China, el más barato"
     },
     "offTopicTitle": "Solo puedo ayudarle con materiales de construcción",
     "offTopicBody": "Nombre un material, por ejemplo porcelanato, cemento, hierro, griferías o luces LED. Puede agregar cantidad, presupuesto y países.",
